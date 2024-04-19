@@ -4,32 +4,27 @@ import { Button } from "../Button.tsx";
 import ButtonBar from "../ButtonBar.tsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { useFormState } from "react-dom";
 import {
-  FeedbackFormAction,
   feedbackFormAction,
   FeedbackFormState,
 } from "@/app/components/material/feedback-actions.ts";
 import RatingInput from "@/app/components/recipepage/RatingInput.tsx";
+import { useFormState } from "react-dom";
 
 type AddFeedbackFormProps = {
   recipeId: string;
 };
 
 export function AddFeedbackForm({ recipeId }: AddFeedbackFormProps) {
-  const [currentState, formAction, isPending] = useFormState(
-    feedbackFormAction,
-    {},
-  );
-
-  console.log("AddFeedbackForm, isPending", isPending);
+  // useFormState will be replaced by useActionState
+  //   useActionState also has a isPending information
+  const [currentState, formAction] = useFormState(feedbackFormAction, {});
 
   return (
     <FeedbackForm
       recipeId={recipeId}
       formAction={formAction}
       formState={currentState}
-      isPending={isPending}
       key={currentState.key || "form1"}
     />
   );
@@ -37,22 +32,15 @@ export function AddFeedbackForm({ recipeId }: AddFeedbackFormProps) {
 
 type FeedbackFormProps = {
   recipeId: string;
-  isPending: boolean;
   formAction: (fd: FormData) => void;
   formState: FeedbackFormState;
 };
 
-function FeedbackForm({
-  recipeId,
-  formAction,
-  formState,
-  isPending,
-}: FeedbackFormProps) {
+function FeedbackForm({ recipeId, formAction, formState }: FeedbackFormProps) {
   const [stars, setStars] = useState(-1);
   const [commentLength, setCommentLength] = useState(0);
 
-  console.log("isPending", isPending);
-  const formDisabled = isPending;
+  const formDisabled = false;
 
   return (
     <form action={formAction}>
@@ -68,7 +56,6 @@ function FeedbackForm({
 
         <div className={"mb-8"}>
           <Input
-            autoFocus
             disabled={formDisabled}
             name={"commenter"}
             className={

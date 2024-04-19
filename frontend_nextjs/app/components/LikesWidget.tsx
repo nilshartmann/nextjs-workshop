@@ -26,8 +26,6 @@ export function LikesWidget({ recipe }: LikesWidgetProps) {
     });
   };
 
-  console.log("ispending", isPending, likes, optimisticLikes);
-
   return (
     <p
       onClick={handleIncreaseLikes}
