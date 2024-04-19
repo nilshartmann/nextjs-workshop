@@ -1,0 +1,66 @@
+image:
+  file: .gitpod.Dockerfile
+tasks:
+  - name: Build
+    init: |
+      ./gradlew :backend:build
+      gp sync-done build
+  - name: "Run Recipify Backend"
+    init: |
+      gp sync-await build
+    command: |
+      export GENERATE_OPEN_API_DOC_ON_STARTUP_TARGET=/workspace/recipify/backend/generated-api-doc.yaml
+      export SPRING_DOCKER_COMPOSE_FILE=/workspace/recipify/docker-compose.yaml
+      ./gradlew :backend:bootRun
+  - name: "Enable pnpm"
+    init: |
+      export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+      corepack prepare pnpm
+      corepack enable pnpm
+      pnpm -v
+      gp sync-done enable-pnpm
+  - name: "Frontend"
+    init: |
+      gp sync-await enable-pnpm
+      cd frontend
+      pnpm install
+      pnpm build
+    command: |
+      gp ports await 8080
+      cd $GITPOD_REPO_ROOT/frontend
+      export RECIPIFY_BACKEND=$(gp url 8080 )
+      pnpm dev
+  - name: "Frontend Next.js"
+    init: |
+      gp sync-await enable-pnpm
+      cd frontend_nextjs
+      pnpm install
+    command: |
+      gp ports await 8080
+      cd $GITPOD_REPO_ROOT/frontend_nextjs
+      export RECIPIFY_BACKEND=$(gp url 8080)
+      pnpm dev:clean
+ports:
+# Backend
+  - port: 8080
+    onOpen: ignore
+    visibility: public
+# SPA Frontend
+  - port: 8090
+    onOpen: open-browser
+    visibility: public
+# Next.js
+  - port: 8100
+    onOpen: open-browser
+    visibility: public
+# Postgres
+  - port: 8432
+    onOpen: ignore
+    visibility: public
+
+vscode:
+  extensions:
+    - redhat.java
+    - vscjava.vscode-java-debug
+    - vscjava.vscode-java-test
+    - pivotal.vscode-spring-boot
