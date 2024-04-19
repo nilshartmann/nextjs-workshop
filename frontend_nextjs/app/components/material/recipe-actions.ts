@@ -20,8 +20,8 @@ export async function increaseLikes(recipeId: string) {
     },
   );
 
-  // revalidateTag("recipes");
-  // revalidateTag(`recipes/${recipeId}`);
+  revalidateTag("recipes");
+  revalidateTag(`recipes/${recipeId}`);
 
   return result;
 }
