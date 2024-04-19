@@ -3,7 +3,7 @@ import { CookingTime } from "./CookingTime.tsx";
 import { Instructions } from "./Instructions.tsx";
 import { Suspense } from "react";
 import LoadingIndicator from "../LoadingIndicator.tsx";
-import { FeedbackForm } from "./FeedbackForm.tsx";
+import { AddFeedbackForm } from "./FeedbackForm.tsx";
 import { DetailedRecipeDto } from "../api-types.ts";
 import FeedbackListLoader from "./FeedbackListLoader.tsx";
 import { Sidebar } from "@/app/components/Sidebar.tsx";
@@ -37,7 +37,7 @@ export default function RecipePageContent({ recipe }: RecipePageContentProps) {
             >
               <FeedbackListLoader recipeId={recipe.id} />
             </Suspense>
-            <FeedbackForm recipeId={recipe.id} />
+            <AddFeedbackForm recipeId={recipe.id} />
           </Sidebar>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { OrderButton } from "@/app/components/recipelistpage/RecipeListButtons.t
 
 export default function RecipeListNavBar() {
   return (
-    <NavButtonBar align={"left_right"}>
+    <NavButtonBar align={"right"}>
       <ButtonBar>
         <OrderButton orderBy={undefined}>Newest first</OrderButton>
         <OrderButton orderBy={"likes"}>Most liked</OrderButton>

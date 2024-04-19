@@ -5,28 +5,59 @@ import ButtonBar from "../ButtonBar.tsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { useFormState } from "react-dom";
-import { feedbackFormAction } from "@/app/components/material/feedback-actions.ts";
+import {
+  FeedbackFormAction,
+  feedbackFormAction,
+  FeedbackFormState,
+} from "@/app/components/material/feedback-actions.ts";
 import RatingInput from "@/app/components/recipepage/RatingInput.tsx";
 
 type AddFeedbackFormProps = {
   recipeId: string;
 };
 
-export function FeedbackForm({ recipeId }: AddFeedbackFormProps) {
+export function AddFeedbackForm({ recipeId }: AddFeedbackFormProps) {
   const [currentState, formAction, isPending] = useFormState(
     feedbackFormAction,
     {},
   );
 
+  console.log("AddFeedbackForm, isPending", isPending);
+
+  return (
+    <FeedbackForm
+      recipeId={recipeId}
+      formAction={formAction}
+      formState={currentState}
+      isPending={isPending}
+      key={currentState.key || "form1"}
+    />
+  );
+}
+
+type FeedbackFormProps = {
+  recipeId: string;
+  isPending: boolean;
+  formAction: (fd: FormData) => void;
+  formState: FeedbackFormState;
+};
+
+function FeedbackForm({
+  recipeId,
+  formAction,
+  formState,
+  isPending,
+}: FeedbackFormProps) {
   const [stars, setStars] = useState(-1);
   const [commentLength, setCommentLength] = useState(0);
 
+  console.log("isPending", isPending);
   const formDisabled = isPending;
 
   return (
-    <form action={formAction} key={currentState.key || "form1"}>
+    <form action={formAction}>
       {/* <!-- Welcome back, ol' hidden friend --> */}
-      <input type={"hidden"} name="recipeId" value={recipeId} autoFocus />
+      <input type={"hidden"} name="recipeId" value={recipeId} />
       <h2 className={"mb-4 font-space text-3xl font-bold"}>Your opinion?</h2>
       <div
         className={
@@ -37,6 +68,7 @@ export function FeedbackForm({ recipeId }: AddFeedbackFormProps) {
 
         <div className={"mb-8"}>
           <Input
+            autoFocus
             disabled={formDisabled}
             name={"commenter"}
             className={
@@ -83,17 +115,17 @@ export function FeedbackForm({ recipeId }: AddFeedbackFormProps) {
             </Button>
           </ButtonBar>
         </div>
-        {currentState.result === "success" && (
+        {formState.result === "success" && (
           <div>
             <div className={"mt-4 font-medium text-green"}>
               Thanks for your submission!
             </div>
           </div>
         )}
-        {currentState.result === "error" && (
+        {formState.result === "error" && (
           <div>
             <div className={"mt-4 font-medium text-red"}>
-              {currentState.message}
+              {formState.message}
             </div>
           </div>
         )}

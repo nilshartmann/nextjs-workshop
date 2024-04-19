@@ -16,7 +16,6 @@
     "openapi:watch": "onchange -i ../backend/generated-api-doc.yaml -- pnpm openapi:generate"
   },
   "dependencies": {
-    "@prisma/client": "5.12.1",
     "bootstrap-icons": "^1.11.2",
     "date-fns": "^3.0.6",
     "next": "14.1.4",
@@ -36,7 +35,6 @@
     "postcss": "^8",
     "prettier": "^3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.10",
-    "prisma": "^5.12.1",
     "tailwindcss": "^3.3.0",
     "typed-openapi": "^0.4.1",
     "typescript": "^5"

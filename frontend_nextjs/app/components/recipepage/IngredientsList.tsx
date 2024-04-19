@@ -1,5 +1,5 @@
 import { Ingredient } from "../api-types.ts";
-import { FeedbackForm } from "@/app/components/recipepage/FeedbackForm.tsx";
+import { AddFeedbackForm } from "@/app/components/recipepage/FeedbackForm.tsx";
 
 type IngredientListProps = {
   ingredients: Ingredient[];
@@ -28,7 +28,7 @@ export default function IngredientList({
           </div>
         );
       })}
-      {!!recipeId && <FeedbackForm recipeId={recipeId} />}
+      {/*{!!recipeId && <AddFeedbackForm recipeId={recipeId} />}*/}
     </>
   );
 }

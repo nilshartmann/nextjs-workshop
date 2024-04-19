@@ -1,5 +1,6 @@
 import {
   GetRecipeFeedbacksResponse,
+  NewFeedback,
   PageResponseRecipeDto,
 } from "@/app/components/api-types.ts";
 import {
@@ -8,6 +9,7 @@ import {
 } from "@/app/components/fetch-from-api.ts";
 import {
   recipesPerPage,
+  slowDown_AddFeedback,
   slowDown_GetFeedbacks,
   slowDown_GetRecipe,
   slowDown_GetRecipeList,
@@ -64,6 +66,19 @@ export function fetchFeedback(
       },
       query: {
         slowdown: slowDown_GetFeedbacks,
+      },
+    },
+  );
+}
+
+export function saveFeedback(recipeId: string, newFeedback: NewFeedback) {
+  return fetchFromApi(
+    getEndpointConfig("post", "/api/recipes/{recipeId}/feedbacks"),
+    {
+      path: { recipeId },
+      body: { feedbackData: newFeedback },
+      query: {
+        slowdown: slowDown_AddFeedback,
       },
     },
   );

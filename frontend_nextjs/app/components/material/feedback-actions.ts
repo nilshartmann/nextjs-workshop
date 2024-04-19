@@ -2,8 +2,8 @@
 
 import { zfd } from "zod-form-data";
 import { z } from "zod";
-import { saveFeedback } from "@/app/feedback-db.ts";
 import { revalidatePath } from "next/cache";
+import { saveFeedback } from "@/app/components/queries.ts";
 
 export type FeedbackFormState =
   | { result?: never; message?: never; key?: never }
@@ -17,10 +17,15 @@ const FormSchema = zfd.formData({
   commenter: zfd.text(z.string().min(3)),
 });
 
-export async function feedbackFormAction(
+export type FeedbackFormAction = (
   prevState: FeedbackFormState,
   formData: FormData,
-): Promise<FeedbackFormState> {
+) => Promise<FeedbackFormState>;
+
+export const feedbackFormAction: FeedbackFormAction = async (
+  prevState,
+  formData,
+) => {
   console.log("feedbackFormAction :: prevState", prevState, formData);
 
   const data = FormSchema.safeParse(formData);
@@ -40,22 +45,6 @@ export async function feedbackFormAction(
 
   await saveFeedback(recipeId, payload);
 
-  // const tag = `feedback/${recipeId}`;
-
-  // const result = await fetchFromApi(
-  //   getEndpointConfig("post", "/api/recipes/{recipeId}/feedbacks"),
-  //   {
-  //     path: { recipeId },
-  //     body: { feedbackData: payload },
-  //     query: {
-  //       slowdown: slowDown_AddFeedback,
-  //     },
-  //   },
-  //   [tag],
-  // );
-  //
-  // revalidateTag(tag);
-
   const path = `/recipes/${recipeId}`;
   console.log("Revalidate", path);
 
@@ -71,4 +60,4 @@ export async function feedbackFormAction(
     //   "instance" of the FeedbackForm
     key: Date.now().toString(),
   };
-}
+};
