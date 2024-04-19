@@ -1,4 +1,4 @@
-rootProject.name = 'recipify'
+rootProject.name = 'nextjs-workshop'
 
 
 include 'backend'
