@@ -15,34 +15,42 @@ import {
 
 export function fetchRecipes(
   page: number,
-  orderBy?: "time" | "rating",
+  orderBy?: "time" | "likes",
   ids?: string[],
 ): Promise<PageResponseRecipeDto> {
   const idsString = ids?.join(",");
-  const result = fetchFromApi(getEndpointConfig("get", "/api/recipes"), {
-    query: {
-      page,
-      size: recipesPerPage,
-      sort: orderBy,
-      ids: idsString,
-      slowdown: slowDown_GetRecipeList,
-      // @ts-ignore
-      timer: Date.now(),
+  const result = fetchFromApi(
+    getEndpointConfig("get", "/api/recipes"),
+    {
+      query: {
+        page,
+        size: recipesPerPage,
+        sort: orderBy,
+        ids: idsString,
+        slowdown: slowDown_GetRecipeList,
+        // @ts-ignore
+        timer: Date.now(),
+      },
     },
-  });
+    ["recipes"],
+  );
 
   return result;
 }
 
 export function fetchRecipe(recipeId: string) {
-  return fetchFromApi(getEndpointConfig("get", "/api/recipes/{recipeId}"), {
-    path: {
-      recipeId,
+  return fetchFromApi(
+    getEndpointConfig("get", "/api/recipes/{recipeId}"),
+    {
+      path: {
+        recipeId,
+      },
+      query: {
+        slowdown: slowDown_GetRecipe,
+      },
     },
-    query: {
-      slowdown: slowDown_GetRecipe,
-    },
-  });
+    [`recipes/${recipeId}`],
+  );
 }
 
 export function fetchFeedback(

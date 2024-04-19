@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const RecipePageListParams = z.object({
   page: z.number().min(0).or(z.string()).pipe(z.coerce.number()).optional(),
-  orderBy: z.enum(["time", "rating"]).optional(),
+  orderBy: z.enum(["time", "likes"]).optional(),
   bookmarkedRecipeIds: z
     .string()
     .or(z.string().array())
@@ -36,19 +36,3 @@ export function getValidatedRecipeListSearchParams(
       : undefined,
   };
 }
-
-// const stringToNumber = z
-//   .string()
-//   .or(z.string().array())
-//   .optional()
-//   .transform((x) => {
-//     if (x === undefined || x === null) {
-//       return undefined;
-//     }
-//     if (Array.isArray(x)) {
-//       return x;
-//     }
-//     return [x];
-//   });
-//
-// const y = stringToNumber.parse(3123);

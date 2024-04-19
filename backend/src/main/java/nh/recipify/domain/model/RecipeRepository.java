@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface RecipeRepository extends Repository<Recipe, Long> {
 
+    Recipe save(Recipe recipe);
+
     List<Recipe> findByUserId(Long id);
 
     Page<Recipe> findAllBy(Pageable p);

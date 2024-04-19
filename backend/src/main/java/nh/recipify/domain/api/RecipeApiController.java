@@ -38,7 +38,7 @@ public class RecipeApiController {
 
     enum ReceipeSort {
         time,
-        rating
+        likes
     }
 
     @GetMapping("/recipes")
@@ -62,7 +62,7 @@ public class RecipeApiController {
                 if (s == ReceipeSort.time) {
                     return Sort.by("totalTime");
                 }
-                return Sort.by("averageRating").descending().and(Sort.by("title"));
+                return Sort.by("likes").descending().and(Sort.by("title"));
             }).orElse(Sort.by("createdAt").descending()));
 
         Page<Recipe> result = ids == null ? recipeRepository.findAllBy(pageable) : recipeRepository.findAllByIdIsIn(pageable, ids);
@@ -163,6 +163,22 @@ public class RecipeApiController {
         var newFeedback = feedbackService.addFeedback(recipeId, addFeedbackRequest.feedbackData());
 
         return new PostFeedbackResponse(newFeedback);
+    }
+
+    record IncrementLikesResponse(@NotNull String recipeId, @NotNull int newLikes) {
+    }
+
+    @PatchMapping("/recipes/{recipeId}/likes")
+    IncrementLikesResponse incrementLikes(@StringParameter @PathVariable long recipeId,
+                                          @RequestParam("slowdown") Optional<Long> slowDown_IncreaseLikes) {
+        sleepFor("Increment Likes for recipeId " + recipeId, slowDown_IncreaseLikes);
+
+        var newLikes = feedbackService.increaseLikes(recipeId);
+
+        return new IncrementLikesResponse(
+            String.valueOf(recipeId),
+            newLikes
+        );
     }
 
     record GetSearchResponse(

@@ -39,11 +39,13 @@ CREATE TABLE recipes (
     total_time       INTEGER        NOT NULL,
     average_rating   NUMERIC(10, 2) NOT NULL DEFAULT 0.0,
     meal_type_id     BIGINT         NOT NULL REFERENCES meal_types (id),
-    steps            TEXT
+    steps            TEXT,
+    likes            INTEGER        NOT NULL DEFAULT (0)
 );
 
 CREATE OR REPLACE FUNCTION calculate_total_time()
-    RETURNS trigger AS $$
+    RETURNS trigger AS
+$$
 BEGIN
     NEW.total_time := NEW.cook_time + NEW.preparation_time;
     RETURN NEW;
@@ -51,7 +53,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER total_time_calculate
-    BEFORE INSERT OR UPDATE ON recipes
+    BEFORE INSERT OR UPDATE
+    ON recipes
     FOR EACH ROW
 EXECUTE FUNCTION calculate_total_time();
 

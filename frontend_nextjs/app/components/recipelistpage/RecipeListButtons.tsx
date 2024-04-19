@@ -34,7 +34,7 @@ export function FilterButton() {
 
 type OrderButtonProps = {
   children: ReactNode;
-  orderBy?: "rating" | "time";
+  orderBy?: "likes" | "time";
 };
 export function OrderButton({ orderBy, children }: OrderButtonProps) {
   const [currentOrderBy, buildHref] = useRecipeListSearchParams(
@@ -52,13 +52,10 @@ export function OrderButton({ orderBy, children }: OrderButtonProps) {
 
   const handleClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
-    console.log("HANDLE CLICK", orderBy);
     startTransition(() => {
-      console.log("START TRANSITION FOR ORDER BY", orderBy);
       router.push(href);
     });
   };
-  //<Link href={href}>{children}</Link>}
 
   return (
     <Button checked={checked}>

@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="02 - Next.js dev:clean" type="js.build_tools.npm">
+  <configuration default="false" name="15 - Next.js check:ts" type="js.build_tools.npm">
     <package-json value="$PROJECT_DIR$/frontend_nextjs/package.json" />
     <command value="run" />
     <scripts>
-      <script value="dev:clean" />
+      <script value="check:ts" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

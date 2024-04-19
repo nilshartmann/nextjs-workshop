@@ -38,4 +38,15 @@ public class FeedbackService {
 
     }
 
+    @Transactional
+    public int increaseLikes(long recipeId) {
+        var recipe = recipeRepository.findById(recipeId).orElseThrow(
+            () -> new EntityNotFoundException("No recipe " + recipeId + " found."));
+
+        recipe.likeRecipe();
+
+        var newLikes = recipeRepository.save(recipe).getLikes();
+
+        return newLikes;
+    }
 }

@@ -1,5 +1,3 @@
-// In TanStackRouter we would use z which would
-
 import Link from "next/link";
 import PaginationBar from "@/app/components/PaginationBar.tsx";
 import { PageButton } from "@/app/components/Button.tsx";

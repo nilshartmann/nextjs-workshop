@@ -4,8 +4,8 @@ export const recipesPerPage = 6;
 /** slowdown reading of /recipes */
 export const slowDown_GetRecipeList = 0;
 
-/** Only for Ingredients in RecipeCard */
-export const slowDown_GetIngredients = 0;
+/** slowdown increasing likes of a recipe */
+export const slowDown_IncreaseLikes = 2400;
 
 /** Single recipe on the /$recipeId route */
 export const slowDown_GetRecipe = 1600;

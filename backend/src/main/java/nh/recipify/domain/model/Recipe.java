@@ -62,6 +62,9 @@ public class Recipe {
     @Column(name = "average_rating", precision = 10, scale = 2, nullable = false, insertable = false, updatable = false)
     private BigDecimal averageRating;
 
+    @Column(nullable = false)
+    private int likes;
+
     @ManyToMany
     @JoinTable(
         name = "recipe_categories",
@@ -126,6 +129,14 @@ public class Recipe {
         return feedbacks;
     }
 
+    public int getLikes() {
+        return likes;
+    }
+
+    public void likeRecipe() {
+        this.likes = this.likes + 1;
+    }
+
     public List<Category> getCategories() {
         return categories.stream()
             .sorted(Comparator.comparing((Category c) -> c.getType().getName())
@@ -149,6 +160,7 @@ public class Recipe {
                ", instructions=" + instructions +
                ", categories=" + categories +
                ", feedbacks=" + feedbacks +
+               ", likes=" + likes +
                '}';
     }
 }

@@ -40,11 +40,17 @@ export const PostNewsletterRegistrationResponse = z.object({
   email: z.string(),
 });
 
+export type IncrementLikesResponse = z.infer<typeof IncrementLikesResponse>;
+export const IncrementLikesResponse = z.object({
+  recipeId: z.string(),
+  newLikes: z.number(),
+});
+
 export type RecipeSummaryDto = z.infer<typeof RecipeSummaryDto>;
 export const RecipeSummaryDto = z.object({
+  id: z.string(),
   title: z.string(),
   mealType: z.string(),
-  id: z.string(),
 });
 
 export type PageResponseRecipeSummaryDto = z.infer<
@@ -79,6 +85,7 @@ export const RecipeDto = z.object({
   categories: z.array(CategoryDto),
   mealType: z.string(),
   averageRating: z.number(),
+  likes: z.number(),
 });
 
 export type GetSearchDetailResponse = z.infer<typeof GetSearchDetailResponse>;
@@ -122,6 +129,7 @@ export const DetailedRecipeDto = z.object({
   categories: z.array(CategoryDto),
   mealType: z.string(),
   averageRating: z.number(),
+  likes: z.number(),
   instructions: z.array(Instruction),
   ingredients: z.array(Ingredient),
 });
@@ -200,6 +208,21 @@ export const post_SubscribeToNewsletter = {
   response: PostNewsletterRegistrationResponse,
 };
 
+export type patch_IncrementLikes = typeof patch_IncrementLikes;
+export const patch_IncrementLikes = {
+  method: z.literal("PATCH"),
+  path: z.literal("/api/recipes/{recipeId}/likes"),
+  parameters: z.object({
+    query: z.object({
+      slowdown: z.number().optional(),
+    }),
+    path: z.object({
+      recipeId: z.string(),
+    }),
+  }),
+  response: IncrementLikesResponse,
+};
+
 export type get_Search = typeof get_Search;
 export const get_Search = {
   method: z.literal("GET"),
@@ -237,7 +260,7 @@ export const get_Recipes = {
     query: z.object({
       page: z.number().optional(),
       size: z.number().optional(),
-      sort: z.union([z.literal("time"), z.literal("rating")]).optional(),
+      sort: z.union([z.literal("time"), z.literal("likes")]).optional(),
       ids: z.string().optional(),
       slowdown: z.number().optional(),
     }),
@@ -306,6 +329,9 @@ export const EndpointByMethod = {
     "/api/recipes/{recipeId}/feedbacks": post_AddFeedback,
     "/api/newsletter/subscribe": post_SubscribeToNewsletter,
   },
+  patch: {
+    "/api/recipes/{recipeId}/likes": patch_IncrementLikes,
+  },
 };
 export type EndpointByMethod = typeof EndpointByMethod;
 // </EndpointByMethod>
@@ -313,6 +339,7 @@ export type EndpointByMethod = typeof EndpointByMethod;
 // <EndpointByMethod.Shorthands>
 export type GetEndpoints = EndpointByMethod["get"];
 export type PostEndpoints = EndpointByMethod["post"];
+export type PatchEndpoints = EndpointByMethod["patch"];
 export type AllEndpoints = EndpointByMethod[keyof EndpointByMethod];
 // </EndpointByMethod.Shorthands>
 
@@ -392,6 +419,20 @@ export class ApiClient {
     >;
   }
   // </ApiClient.post>
+
+  // <ApiClient.patch>
+  patch<
+    Path extends keyof PatchEndpoints,
+    TEndpoint extends PatchEndpoints[Path],
+  >(
+    path: Path,
+    ...params: MaybeOptionalArg<z.infer<TEndpoint["parameters"]>>
+  ): Promise<z.infer<TEndpoint["response"]>> {
+    return this.fetcher("patch", this.baseUrl + path, params[0]) as Promise<
+      z.infer<TEndpoint["response"]>
+    >;
+  }
+  // </ApiClient.patch>
 }
 
 export function createApiClient(fetcher: Fetcher, baseUrl?: string) {

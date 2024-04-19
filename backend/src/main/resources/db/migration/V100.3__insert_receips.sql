@@ -1264,3 +1264,44 @@ VALUES (129, 40, 'Pour soup into ovenproof bowls, top each with a slice of bread
 
 INSERT INTO public.instructions (id, recipe_id, description, order_no) VALUES (130, 40, 'Put the bowls under your oven broiler until the cheese has melted and bubbly. Watch closely to avoid burning!', 4);
 -- @formatter:on
+
+
+UPDATE recipes SET likes = 35 WHERE recipes.id = 1;
+UPDATE recipes SET likes = 87 WHERE recipes.id = 2;
+UPDATE recipes SET likes = 42 WHERE recipes.id = 3;
+UPDATE recipes SET likes = 15 WHERE recipes.id = 4;
+UPDATE recipes SET likes = 120 WHERE recipes.id = 5;
+UPDATE recipes SET likes = 101 WHERE recipes.id = 6;
+UPDATE recipes SET likes = 18 WHERE recipes.id = 7;
+UPDATE recipes SET likes = 75 WHERE recipes.id = 8;
+UPDATE recipes SET likes = 122 WHERE recipes.id = 9;
+UPDATE recipes SET likes = 12 WHERE recipes.id = 10;
+UPDATE recipes SET likes = 56 WHERE recipes.id = 11;
+UPDATE recipes SET likes = 89 WHERE recipes.id = 12;
+UPDATE recipes SET likes = 37 WHERE recipes.id = 13;
+UPDATE recipes SET likes = 77 WHERE recipes.id = 14;
+UPDATE recipes SET likes = 24 WHERE recipes.id = 15;
+UPDATE recipes SET likes = 92 WHERE recipes.id = 16;
+UPDATE recipes SET likes = 68 WHERE recipes.id = 17;
+UPDATE recipes SET likes = 54 WHERE recipes.id = 18;
+UPDATE recipes SET likes = 118 WHERE recipes.id = 19;
+UPDATE recipes SET likes = 59 WHERE recipes.id = 20;
+UPDATE recipes SET likes = 41 WHERE recipes.id = 21;
+UPDATE recipes SET likes = 103 WHERE recipes.id = 22;
+UPDATE recipes SET likes = 50 WHERE recipes.id = 23;
+UPDATE recipes SET likes = 79 WHERE recipes.id = 24;
+UPDATE recipes SET likes = 15 WHERE recipes.id = 25;
+UPDATE recipes SET likes = 125 WHERE recipes.id = 26;
+UPDATE recipes SET likes = 58 WHERE recipes.id = 27;
+UPDATE recipes SET likes = 83 WHERE recipes.id = 28;
+UPDATE recipes SET likes = 100 WHERE recipes.id = 29;
+UPDATE recipes SET likes = 67 WHERE recipes.id = 30;
+UPDATE recipes SET likes = 33 WHERE recipes.id = 31;
+UPDATE recipes SET likes = 85 WHERE recipes.id = 32;
+UPDATE recipes SET likes = 60 WHERE recipes.id = 33;
+UPDATE recipes SET likes = 48 WHERE recipes.id = 34;
+UPDATE recipes SET likes = 25 WHERE recipes.id = 35;
+UPDATE recipes SET likes = 45 WHERE recipes.id = 36;
+UPDATE recipes SET likes = 73 WHERE recipes.id = 37;
+UPDATE recipes SET likes = 92 WHERE recipes.id = 38;
+UPDATE recipes SET likes = 52 WHERE recipes.id = 39;

@@ -1,5 +1,6 @@
 import { RecipeDto } from "./api-types.ts";
 import { formatMinuteDuration } from "./FormatMinuteDuration.tsx";
+import { LikesWidget } from "@/app/components/LikesWidget.tsx";
 
 type RecipeCategoriesProps = {
   recipe: RecipeDto;
@@ -9,6 +10,7 @@ type RecipeCategoriesProps = {
 export function RecipeCategories({ recipe, hideTime }: RecipeCategoriesProps) {
   return (
     <div className={"space-y-2"}>
+      <LikesWidget recipe={recipe} />
       {hideTime || (
         <p className="me-2 inline-block rounded border border-green bg-white p-2 text-[15px] text-green">
           <i className="fa-regular fa-clock mr-2"></i>

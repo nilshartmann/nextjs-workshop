@@ -84,6 +84,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostNewsletterRegistrationResponse'
+  /api/recipes/{recipeId}/likes:
+    patch:
+      tags:
+      - recipe-api-controller
+      operationId: incrementLikes
+      parameters:
+      - name: recipeId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: slowdown
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncrementLikesResponse'
   /api/search:
     get:
       tags:
@@ -163,7 +187,7 @@ paths:
           type: string
           enum:
           - time
-          - rating
+          - likes
       - name: ids
         in: query
         required: false
@@ -327,6 +351,17 @@ components:
       properties:
         email:
           type: string
+    IncrementLikesResponse:
+      required:
+      - newLikes
+      - recipeId
+      type: object
+      properties:
+        recipeId:
+          type: string
+        newLikes:
+          type: integer
+          format: int32
     PageResponseRecipeSummaryDto:
       required:
       - content
@@ -396,6 +431,7 @@ components:
       - createdAt
       - headline
       - id
+      - likes
       - mealType
       - preparationTime
       - title
@@ -428,6 +464,9 @@ components:
         averageRating:
           type: number
           format: double
+        likes:
+          type: integer
+          format: int32
     PageResponseRecipeDto:
       required:
       - content
@@ -463,6 +502,7 @@ components:
       - id
       - ingredients
       - instructions
+      - likes
       - mealType
       - preparationTime
       - title
@@ -495,6 +535,9 @@ components:
         averageRating:
           type: number
           format: double
+        likes:
+          type: integer
+          format: int32
         instructions:
           type: array
           items:

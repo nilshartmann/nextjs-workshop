@@ -18,7 +18,8 @@ public record RecipeDto(
     @NotNull int cookTime,
     @NotNull List<CategoryDto> categories,
     @NotNull String mealType,
-    @NotNull double averageRating
+    @NotNull double averageRating,
+    @NotNull int likes
 ) {
 
     public static RecipeDto forRecipe(Recipe r) {
@@ -32,7 +33,8 @@ public record RecipeDto(
             r.getCookTime(),
             r.getCategories().stream().map(CategoryDto::of).toList(),
             r.getMealType().getName(),
-            r.getFeedbacks().stream().mapToInt(Feedback::getRating).average().orElse(0)
+            r.getFeedbacks().stream().mapToInt(Feedback::getRating).average().orElse(0),
+            r.getLikes()
         );
     }
 
