@@ -9,8 +9,8 @@ tasks:
     init: |
       gp sync-await build
     command: |
-      export GENERATE_OPEN_API_DOC_ON_STARTUP_TARGET=/workspace/recipify/backend/generated-api-doc.yaml
-      export SPRING_DOCKER_COMPOSE_FILE=/workspace/recipify/docker-compose.yaml
+      export GENERATE_OPEN_API_DOC_ON_STARTUP_TARGET=/workspace/nextjs-workshop/backend/generated-api-doc.yaml
+      export SPRING_DOCKER_COMPOSE_FILE=/workspace/nextjs-workshop/docker-compose.yaml
       ./gradlew :backend:bootRun
   - name: "Enable pnpm"
     init: |
@@ -19,17 +19,6 @@ tasks:
       corepack enable pnpm
       pnpm -v
       gp sync-done enable-pnpm
-  - name: "Frontend"
-    init: |
-      gp sync-await enable-pnpm
-      cd frontend
-      pnpm install
-      pnpm build
-    command: |
-      gp ports await 8080
-      cd $GITPOD_REPO_ROOT/frontend
-      export RECIPIFY_BACKEND=$(gp url 8080 )
-      pnpm dev
   - name: "Frontend Next.js"
     init: |
       gp sync-await enable-pnpm
@@ -45,10 +34,6 @@ ports:
   - port: 8080
     onOpen: ignore
     visibility: public
-# SPA Frontend
-  - port: 8090
-    onOpen: open-browser
-    visibility: public
 # Next.js
   - port: 8100
     onOpen: open-browser
@@ -60,6 +45,8 @@ ports:
 
 vscode:
   extensions:
+    - bradlc.vscode-tailwindcss
+    - esbenp.prettier-vscode
     - redhat.java
     - vscjava.vscode-java-debug
     - vscjava.vscode-java-test
