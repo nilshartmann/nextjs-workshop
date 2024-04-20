@@ -1,12 +1,10 @@
 # Workshop: Fullstack Anwendungen mit React und Next.js
 
-Dieses Repository enthält den Source-Code für die Beispiel-Anwendung sowie den Workspace für unsere Übungen. 
+Dieses Repository (https://github.com/nilshartmann/nextjs-workshop) enthält den Source-Code für die Beispiel-Anwendung sowie den Workspace für unsere Übungen.
 
 Im folgenden findest Du beschrieben, wie du den Workspace einrichtest und die Anwendung für die Übung startest.
 
-
 ![Screenshot of example application](screenshot.png)
-
 
 ## Voraussetzungen
 
@@ -36,7 +34,7 @@ In dieser Variante muss der Port `8080` verfügbar sein.
 Ich werde das Backend während des Workshops auch in der Cloud starten. Du kannst die Next.js-Anwendung dann so konfigurieren, dass sie die Instanz in der Cloud verwendet.
 
 - Wenn Du kein Docker auf deinem Laptop hast, oder das Docker Image nicht installieren kannst/darfst, ist diese Variante die einfachste.
-- Aber: das gehostete Backend ist nicht das schnellste. 
+- Aber: das gehostete Backend ist nicht das schnellste.
 - Wenn mehrere von euch das Backend nutzen, kommt ihr euch bei schreibenden Operationen eventuell in die Quere. Das sollte technisch kein Problem sein. Du darfst dich nur nicht wundern, wenn Likes und Kommentare bei dir erscheinen, die Du nicht gegeben hast 😉.
 
 **Variante 4**: GitPod
@@ -56,7 +54,7 @@ Die Next.js-Anwendung läuft auf Port `8100`. Dieser Port muss also bei dir frei
 
 ## Installation und Starten des Backends
 
-* Zu den **Voraussetzungen** der einzelnen Varianten, s.o.
+- Zu den **Voraussetzungen** der einzelnen Varianten, s.o.
 
 ### Variante 1: Starten des Java-Prozesses in deiner IDE
 
@@ -89,18 +87,19 @@ RECIPIFY_BACKEND=Der-Hostname-kommt-von-Nils-im-Workshop
 Um den kompletten Workspace in GitPod zu starten, gibt es zwei Möglichkeiten.
 
 - Du kannst einfach [mit diesem Link GitPod mit dem Workspace starten](https://gitpod.io/#https://github.com/nilshartmann/nextjs-workshop)
-- Du öffnest die Seite https://github.com/nilshartmann/nextjs-workshop im Browser und klickst dort auf `Open`. 
+- Du öffnest die Seite https://github.com/nilshartmann/nextjs-workshop im Browser und klickst dort auf `Open`.
 - Hinweis: grundsätzlich kannst Du den Workspace über Gitpod auch in einer lokalen IDE öffnen. Dazu wirst Du beim Starten von GitPod befragt. Dafür müssen aber bestimmte Voraussetzungen erfüllt sein. Weitere Informationen findest du [hier in der GitPod Dokumentation](https://www.gitpod.io/docs/references/ides-and-editors)
 
 ## Starten der Next.js-Anwendung
 
-Die Next.js-Anwendung existiert zweimal. Einmal als "Workspace-Version" (Verzeichnis: `TODO`), in der wir die Übungen machen und in einer "fertigen" Version, die Du dir bei Interesse ansehen kannst. Der Start ist für beide Versionen identisch, aber du kannst - wegen Port-Kollisionen - möglicherweise nur eine der beiden Varianten zeitgleich starten.
+Die Next.js-Anwendung existiert zweimal:
 
-Die folgenden Schritte beziehen sich auf die "Workspace-Version", bei Interesse kannst Du sie aber auch im Verzeichnis `frontend_nextjs` durchführen, dort liegt die fertige Version.
+1. Eine "Workspace-Version" (Verzeichnis: `workspace`). **Hier werden wir während des Workshops arbeiten und die Übungen machen**.
+2. Eine "fertige" Version (Verzeichnis `frontend_nextjs`), die Du dir bei Interesse ansehen kannst. Diese Version ist weitgehend identisch mit der fertigen "Workspace-Version", enthält aber noch ein paar Features, die über unseren Workshop hinausgehen. Wenn Du diesen Stand zum ausprobieren starten möchtest, sind dieselben Schritte wie für die "Workspace-Version" erforderlich. Du führst die Schritte dann aber im Verzeichnis `frontend_nextjs` aus. Möglicherweise kannst Du nicht beide Versionen gleichzeitig starten, da es zu Port Kollisionen kommen kann. (Beide laufen auf Port 8100).
 
 ### (Optional) Schritt 1: Installation von pnpm
 
-Grunsätzlich sollte die Installation der npm-Packages mit npm und yarn funktionieren.
+Grundsätzlich sollte die Installation der npm-Packages mit npm und yarn funktionieren.
 
 Ich habe aber mit [pnpm](https://pnpm.io/) getestet. Falls du noch kein pnpm installiert hast, solltest du das jetzt tun. Dazu gibt es [mehrere Wege](https://pnpm.io/installation). Am einfachsten geht es über [Node.js corepacks](https://nodejs.org/docs/latest-v20.x/api/corepack.html).
 
@@ -117,6 +116,7 @@ Wir arbeiten im Verzeichnis `workspace`. In diesem Verzeichnis auf der Kommandoz
 ```
 pnpm install
 ```
+
 (Alternative npm oder yarn verwenden)
 
 ### Schritt 3: Starten der Next.js-Anwendung
@@ -136,11 +136,10 @@ Next.js hat ein sehr aggressives Caching eingebaut. Deswegen kann es manchmal se
 - Im Browser "hard refresh" machen (Cmd+Shift+R bzw. Ctrl+Shift+R bei Firefox z.B.). Dann verwirft Firefox Dateien im Cache.
 - Das Verzeichnis `workspace/.next` löschen und Next.js neustarten
 
-
 ## Fragen, Kommentare, Feedback
 
 Wenn Du Fragen oder Probleme hast, sprich mich gerne an.
 
-Wenn Du nach dem Workshop mit mir in Kontakt bleiben möchtest, findest Du hier meine  [Kontaktdaten](https://nilshartmann.net/kontakt).
+Wenn Du nach dem Workshop mit mir in Kontakt bleiben möchtest, findest Du hier meine [Kontaktdaten](https://nilshartmann.net/kontakt).
 
 Ich wünsche dir nun viel Spaß in unserem Workshop!
