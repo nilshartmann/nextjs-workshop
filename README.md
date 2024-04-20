@@ -1,75 +1,141 @@
-# Recipify: Frontend Demo
+# Workshop: Fullstack Anwendungen mit React und Next.js
 
-This is a sample application for various frontend technologies.
+Dieses Repository enthält den Beispiel-Code sowie den Workspace für unsere Übungen.
 
-![Screenshot of example application](screenshot.png)
+Im folgenden findest Du beschrieben, wie du den Workspace einrichtest und die Anwendung für die Übung startest.
 
-### Techstack
+## Voraussetzungen
 
-**Backend:**
+Die Anwendung besteht aus zwei Teilen, die beide das Backend darstellen:
 
-- Java (JDK21), Spring Boot 3.2
-- Postgres 16
+1. Wir haben ein Backend, das unsere Daten und unsere Geschäftslogik enthält. Die Daten werden mit einer einfachen HTTP API zur Verfügung gestellt. Dieses Backend bezeichne ich im folgenden einfach nur als das **Backend**. Das Backend ist "fertig" und wird im Workshop nicht weiterentwickelt.
+2. Das zweite Backend ist die Node.js-Anwendung. Diese fungiert hier als eine Art "Backend for frontend". Die Anwendung kommuniziert mit dem Backend und stellt das Frontend für den Browser zur Verfügung. Diese Anwendung bezeichne ich im folgenden als **Node.js**-Anwendung. Diese Anwendung werden wir in den Übungen weiterentwickeln bzw. vervollständigen.
 
-**Frontend (Single-Page-App)**
+### Voraussetzungen für das Backend
 
-- React 18
-- TypeScript
-- Vite
-- TanStack Router and TanStack Query
-- TypeScript and zod-Code for typesafe API access is automatically generated from OpenAPI definitions.
-  - You can find [more on that here](https://github.com/nilshartmann/end-to-end-typesafety-spring-boot-typescript).
+Das Backend ist in Java (21) und Spring Boot 3.2 geschrieben. Außerdem benötigt es eine Postgres 16 Datenbank. Es gibt mehrere Möglichkeiten, wie Du das Backend starten und verwenden kannst. Im folgenden sind die einzelnen Varianten beschrieben. Weiter unten findest Du jeweils beschrieben, wie du sie verwenden kannst.
 
-I recorded a **video on TanStack Router**, that uses this demo example. You can find the [video on YouTube](https://youtu.be/KkrS_wfFq2I).
+**Variante 1**: Starten des Java-Prozesses aus deiner IDE bzw. über die Kommandozeile.
 
-## Running the backend
+Dieses ist der aufwändigste Weg und macht aus meiner Sicht nur Sinn, wenn Du ohnehin Java entwickelst. Du brauchst dann ein JDK21 und Docker auf deinem Laptop. Dein Laptop muss in der Lage sein über Gradle und Docker Pakete bzw. Images zu installieren.
 
-The backend that provides the API for the JS frontends and the HTMX endpoints is implemented with Spring Boot and Java.
+In dieser Variante müssen die Ports `8080` und `8432` verfügbar sein.
 
-In order to run it, you either have to use Java or use the prebuild Docker Image.
+**Variante 2**: Starten per docker-compose
 
-The easiest is to use the `docker-compose-backend.yaml` file in the root of this project, that starts the backend and the postgres database. You do not need to have installed for it to run:
+Das Backend gibt es als fertig gebautes Docker Image. Wenn Du Docker auf deinem Laptop installiert hast, ist die einfachste Möglichkeit, das Backend zu verwenden, über das hier enthaltene docker-compose-File den Backend-Prozess samt Datenbank zu starten. Das [Image der Backend-Anwendung liegt in der GitHub Container Registry](https://github.com/nilshartmann/nextjs-workshop/pkgs/container/nextjs-workshop). Das bedeutet, dein Laptop bzw. Docker muss in der Lage sein, Images aus der Docker und der GitHub Registry zu installieren.
+
+In dieser Variante muss der Port `8080` verfügbar sein.
+
+**Variante 3**: Verwenden der gehosteten Variante in der Cloud
+
+Ich werde das Backend während des Workshops auch in der Cloud starten. Du kannst die Next.js-Anwendung dann so konfigurieren, dass sie die Instanz in der Cloud verwendet.
+
+- Wenn Du kein Docker auf deinem Laptop hast, oder das Docker Image nicht installieren kannst/darfst, ist diese Variante die einfachste.
+- Aber: das gehostete Backend ist nicht das schnellste. 
+- Wenn mehrere von euch das Backend nutzen, kommt ihr euch bei schreibenden Operationen eventuell in die Quere. Das sollte technisch kein Problem sein. Du darfst dich nur nicht wundern, wenn Likes und Kommentare bei dir erscheinen, die Du nicht gegeben hast 😉.
+
+**Variante 4**: GitPod
+
+[GitPod](https://gitpod.io) ist eine vollständige Online Entwicklungsumgebung. Voraussetzung hierfür ist ein GitHub und ein GitPod-Account, die beide kostenlos sind. Du kannst das komplette Repository über GitHub in GitPod starten. Dann kannst Du entweder vollständig in GitPod arbeiten (Web, VS Code oder IntelliJ) oder Du verwendest Du nur das Backend, das in GitPod läuft, wenn Du den Workspace in GitPod gestartet hast.
+
+- Diese Variante ist am besten, wenn Du auf deinem Laptop nichts installieren kannst (auch keine npm-Packages)
+- Du benötigst nur Internet-Zugriff (Web) und einen GitHub- und GitPod-Account, die beide kostenlos sind und die Du nach dem Workshop auch wieder löschen könntest.
+
+### Voraussetzungen für die Next.js-Anwendung
+
+Die Next.JS-Anwendung benötigt Node.JS (mindestens Version 18). Die Pakete werden mit [pnpm](https://pnpm.io/installation) installiert. Dabei handelt es sich um einen alternativen Package-Manager zur npm, den Du über Node.js selbst aktivieren kannst. Wenn das bei dir nicht funktioniert, sollte auch npm oder yarn funktionieren. Ich habe die Installation aber nur mit pnpm getestet.
+
+Dein Laptop muss mit dem Package Manager in der Lage sein, npm Packages runterzuladen und zu installieren.
+
+Die Next.js-Anwendung läuft auf Port `8100`. Dieser Port muss also bei dir frei sein.
+
+## Installation und Starten des Backends
+
+* Zu den **Voraussetzungen** der einzelnen Varianten, s.o.
+
+### Variante 1: Starten des Java-Prozesses in deiner IDE
+
+Das Java-Projekt wird mit Gradle gebaut. Wenn Du das Projekt in deiner IDE öffnest, sollte diese also in der Lage sein, Gradle-Projekte zu importieren. Das geht bei IntelliJ z.B. automatisch. Nach dem Importieren und compilieren startest Du die Spring Boot `main`-Klasse `nh.recipify.BackendApplication`.
+
+Diese Klasse sorgt auch automatisch dafür, dass ein Docker-Container mit einer Postgres Datenbank gestartet wird. Voraussetzung dafür ist, dass Du docker-compose auf einem Computer installiert hast.
+
+### Variante 2: Starten des Backends per docker-compose
+
+Du kannst das fertige Backend samt Datenbank starten, in dem Du das `docker-compose-backend.yaml`-File im Root-Verzeichnis des Workspaces startest:
 
 ```
 docker-compose -f docker-compose-backend.yaml up -d
 ```
 
-If you're a Java ("fullstack") developer, you can instead launch the backend from your IDE by running the Spring Boot class `nh.recipify.TestBackendApplication`. This also automatically starts the postgres database using Testcontainers. (Note that you need to have JDK21 installed)
+In dem Compose-File sind der Backend-Prozess und die Datenbank beschrieben, so dass Du nichts weiter starten musst.
 
-In either way, the backend runs on http://localhost:8080.
+### Variante 3: Verwenden des Backens in der Cloud
 
-## Using the HTMX frontend
+In dieser Variante musst Du das Backend nicht starten. Stattdessen legst Du eine `.env`-Datei im Verzeichnis **TODO** an und trägst dort den Servernamen ein. Den Servernamen gebe ich dir während des Workshops (falls ich das vergesse, einfach fragen). Ich würde dich bitten, mit dem Server sorgsam umzugehen, der steht mehr oder weniger schutzlos im Internet 😉.
 
-Please see `backend/readme.md` for more informations.
+```
+xxx/.env
+RECIPIFY_BACKEND=Der-Hostname-kommt-von-Nils-im-Workshop
+```
 
-## Running the SPA frontend
+### Variante 4: GitPod
 
-The frontend is a Single-Page-Application built with Vite and uses [pnpm](https://pnpm.io/) as package manager.
+Um den kompletten Workspace in GitPod zu starten, gibt es zwei Möglichkeiten.
 
-If you have not installed pnpm already, you can enable it with [Node.js corepacks](https://nodejs.org/docs/latest-v20.x/api/corepack.html) by running on your terminal:
+- Du kannst einfach [mit diesem Link GitPod mit dem Workspace starten](https://gitpod.io/#https://github.com/nilshartmann/nextjs-workshop)
+- Du öffnest die Seite https://github.com/nilshartmann/nextjs-workshop im Browser und klickst dort auf `Open`. 
+- Hinweis: grundsätzlich kannst Du den Workspace über Gitpod auch in einer lokalen IDE öffnen. Dazu wirst Du beim Starten von GitPod befragt. Dafür müssen aber bestimmte Voraussetzungen erfüllt sein. Weitere Informationen findest du [hier in der GitPod Dokumentation](https://www.gitpod.io/docs/references/ides-and-editors)
+
+## Starten der Next.js-Anwendung
+
+Die Next.js-Anwendung existiert zweimal. Einmal als "Workspace-Version" (Verzeichnis: `TODO`), in der wir die Übungen machen und in einer "fertigen" Version, die Du dir bei Interesse ansehen kannst. Der Start ist für beide Versionen identisch, aber du kannst - wegen Port-Kollisionen - möglicherweise nur eine der beiden Varianten zeitgleich starten.
+
+Die folgenden Schritte beziehen sich auf die "Workspace-Version", bei Interesse kannst Du sie aber auch im Verzeichnis `frontend_nextjs` durchführen, dort liegt die fertige Version.
+
+### (Optional) Schritt 1: Installation von pnpm
+
+Grunsätzlich sollte die Installation der npm-Packages mit npm und yarn funktionieren.
+
+Ich habe aber mit [pnpm](https://pnpm.io/) getestet. Falls du noch kein pnpm installiert hast, solltest du das jetzt tun. Dazu gibt es [mehrere Wege](https://pnpm.io/installation). Am einfachsten geht es über [Node.js corepacks](https://nodejs.org/docs/latest-v20.x/api/corepack.html).
+
+Dazu führst Du einfach auf der Kommandozeile folgenden Befehl aus (`corepacks` ist Bestandteil von Node.js):
 
 ```
 corepacks enable
 ```
 
-(Probably installing the packages with npm or yarn would work too, but I have not tested it.)
+### Schritt 2: Installation der npm-Packages
 
-Then install and start the Vite devserver for the frontend:
+Wir arbeiten im Verzeichnis `workspace`. In diesem Verzeichnis auf der Kommandozeile bitte folgenden Befehl ausführen:
 
 ```
-cd frontend_simple
 pnpm install
+```
+(Alternative npm oder yarn verwenden)
+
+### Schritt 3: Starten der Next.js-Anwendung
+
+Die Next.js-Anwendung kannst Du ebenfalls im `workspace`-Verzeichnis starten, in dem Du dort das `dev`-Script ausführst:
+
+```
 pnpm dev
 ```
 
-The frontend runs on http://localhost:8090
+Die Anwendung startet nun und sollte nach kurzer Zeit auf http://localhost:8100 laufen.
 
-## A note on the content
+### Hinwese zum Next.js Cache
 
-The content is almost entirely generated with JetBrains AI Assistent, ChatGPT and DALL-E. You should not treat the recipes for real (unless you blindly trust AI) :-)
+Next.js hat ein sehr aggressives Caching eingebaut. Deswegen kann es manchmal sein, dass Du Änderungen nicht sofort siehst. Deswegen hilft es manchmal:
 
-## Questions, comments, feedback
+- Im Browser "hard refresh" machen (Cmd+Shift+R bzw. Ctrl+Shift+R bei Firefox z.B.). Dann verwirft Firefox Dateien im Cache.
+- Das Verzeichnis `workspace/.next` löschen und Next.js neustarten
 
-If you have questions or commments, please feel free to open an issue here in this directory.
 
-You can also reach and follow me on [several platforms](https://nilshartmann.net/follow-me).
+## Fragen, Kommentare, Feedback
+
+Wenn Du Fragen oder Probleme hast, sprich mich gerne an.
+
+Wenn Du nach dem Workshop mit mir in Kontakt bleiben möchtest, findest Du hier meine  [Kontaktdaten](https://nilshartmann.net/kontakt).
+
+Ich wünsche dir nun viel Spaß in unserem Workshop!
