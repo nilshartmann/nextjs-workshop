@@ -1,8 +1,12 @@
 # Workshop: Fullstack Anwendungen mit React und Next.js
 
-Dieses Repository enthält den Beispiel-Code sowie den Workspace für unsere Übungen.
+Dieses Repository enthält den Source-Code für die Beispiel-Anwendung sowie den Workspace für unsere Übungen. 
 
 Im folgenden findest Du beschrieben, wie du den Workspace einrichtest und die Anwendung für die Übung startest.
+
+
+![Screenshot of example application](screenshot.png)
+
 
 ## Voraussetzungen
 
@@ -72,10 +76,11 @@ In dem Compose-File sind der Backend-Prozess und die Datenbank beschrieben, so d
 
 ### Variante 3: Verwenden des Backens in der Cloud
 
-In dieser Variante musst Du das Backend nicht starten. Stattdessen legst Du eine `.env`-Datei im Verzeichnis **TODO** an und trägst dort den Servernamen ein. Den Servernamen gebe ich dir während des Workshops (falls ich das vergesse, einfach fragen). Ich würde dich bitten, mit dem Server sorgsam umzugehen, der steht mehr oder weniger schutzlos im Internet 😉.
+In dieser Variante musst Du das Backend nicht starten. Stattdessen legst Du eine `.env`-Datei im Verzeichnis `workspace` an und trägst dort den Servernamen ein. Den Servernamen gebe ich dir während des Workshops (falls ich das vergesse, einfach fragen). Ich würde dich bitten, mit dem Server sorgsam umzugehen, der steht mehr oder weniger schutzlos im Internet 😉.
 
 ```
-xxx/.env
+# workspace/.env
+
 RECIPIFY_BACKEND=Der-Hostname-kommt-von-Nils-im-Workshop
 ```
 
