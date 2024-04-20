@@ -62,6 +62,8 @@ Das Java-Projekt wird mit Gradle gebaut. Wenn Du das Projekt in deiner IDE öffn
 
 Diese Klasse sorgt auch automatisch dafür, dass ein Docker-Container mit einer Postgres Datenbank gestartet wird. Voraussetzung dafür ist, dass Du docker-compose auf einem Computer installiert hast.
 
+Wenn das Backend gestartet ist, kannst Du einmal `localhost:8080/api/recipes` im Browser öffnen. Dort sollte eine JSON-Liste mit Rezepten zurückgeliefert werden.
+
 ### Variante 2: Starten des Backends per docker-compose
 
 Du kannst das fertige Backend samt Datenbank starten, in dem Du das `docker-compose-backend.yaml`-File im Root-Verzeichnis des Workspaces startest:
@@ -72,6 +74,8 @@ docker-compose -f docker-compose-backend.yaml up -d
 
 In dem Compose-File sind der Backend-Prozess und die Datenbank beschrieben, so dass Du nichts weiter starten musst.
 
+Wenn das Backend gestartet ist, kannst Du einmal `localhost:8080/api/recipes` im Browser öffnen. Dort sollte eine JSON-Liste mit Rezepten zurückgeliefert werden.
+
 ### Variante 3: Verwenden des Backens in der Cloud
 
 In dieser Variante musst Du das Backend nicht starten. Stattdessen legst Du eine `.env`-Datei im Verzeichnis `workspace` an und trägst dort den Servernamen ein. Den Servernamen gebe ich dir während des Workshops (falls ich das vergesse, einfach fragen). Ich würde dich bitten, mit dem Server sorgsam umzugehen, der steht mehr oder weniger schutzlos im Internet 😉.
@@ -81,6 +85,8 @@ In dieser Variante musst Du das Backend nicht starten. Stattdessen legst Du eine
 
 RECIPIFY_BACKEND=Der-Hostname-kommt-von-Nils-im-Workshop
 ```
+
+Zum Testen der Verbindung kannst Du einmal den Cloud-Hostnamen mit dem Pfad `/api/recipes` im Browser öffnen aufrufen (https://Der-Hostname-kommt-von-Nils-im-Workshop/api/recipes).
 
 ### Variante 4: GitPod
 

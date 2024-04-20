@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for frontend-nextjs on 2024-04-19T21:52:41+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'frontend-nextjs'
+primary_region = 'atl'
+
+[build]
+
+[env]
+  RECIPIFY_BACKEND = 'https://nextjs-workshop-backend.fly.dev'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

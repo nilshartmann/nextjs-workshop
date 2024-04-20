@@ -154,22 +154,24 @@
 
 ### Der Next.js Router
 
-- App-Router: aktueller Router (seit Version 13.4), der RSC unterstützt
-  - (Pages-Router: ohne RSC)
-- File-system-basierter Router, es spielt sich alles unterhalb von `app` ab
-- In Next.js ist ein Ordner unterhalb von `app` eine Route, wenn darin eine `page.tsx`-Datei liegt
+- [App-Router](https://nextjs.org/docs/app/building-your-application/routing): neuer Router (seit Version 13.4), der RSC unterstützt
+  - (der "alte" `pages`-Router unterstützt keine RSC)
+- File-system-basierter Router, der Code eurer Anwendung liegt unterhalb des Verzeichnisses `app`
+- Unterhalb von `app` ist ein Verzeichnis eine **Route**, wenn darin eine `page.tsx`-Datei liegt
+  - Dann ist dieses Verzeichnis vom Browser aufrufbar (`app/user/profile/page.tsx` -> Pfad im Browser: `/user/profile`)
   - `page.tsx` vergleichbar mit `index.html` in klassischem Web-Server
-  - Verzeichnisse, die keine `page.tsx`-Datei haben, tauchen zwar in der URL auf, können aber nicht aufgerufen werden
-- Diese Datei exportiert per `default export` eine React-Komponente, die für die Route dargestellt werden soll
+  - Verzeichnisse, die _keine_ `page.tsx`-Datei haben, tauchen zwar in der URL auf, können aber nicht aufgerufen werden
+- Eine **Routen-Datei** muss per `default export` eine React-Komponente exportieren.
+- Diese Komponente wird dargestellt, wenn die Route vom Browser angefordert wird
 - ```tsx
   // /app/page.tsx
   export default function LandingPage() {
     return <h1>Hello World!</h1>;
   }
 
-  // /app/posts/page.tsx
-  export default function PostListPage() {
-    return <h1>Blog Posts</h1>;
+  // /app/recipes/page.tsx
+  export default function RecipeListPage() {
+    return <h1>Tasteful recipes 😋</h1>;
   }
   ```
 
@@ -180,8 +182,8 @@
 - In einem Route-Verzeichnis kann es weitere Dateien geben, die einen festgelegten Namen haben und jeweils per `default export` eine React-Komponente zurückliefern:
 - `layout.tsx`: Definiert die Layout-Komponente.
   - Damit kann über mehrere Routen ein einheitliches Layout festgelegt werden, denn wenn eine Seite gerendert wird, werden alle Layout-Komponenten aus den Pfaden darüber verwendet. So kann eine Hierarchie von Layouts gebaut werden.
+- `loading.tsx`: Loading-Spinner o.ä., der dargestellt wird, bis die Seite gerendert werden kann (dazu später mehr)
 - `error.tsx`: Eine Komponente, die als Error Boundary fungiert und gerendert wird, wenn beim Rendern der `page` ein Fehler aufgetreten ist
-- `loading.tsx`: Loading-Spinner o.ä., der dargestellt wird, bis die Seite gerendert werden kann (dzau später mehr)
 - `not-found.tsx`: Kann verwendet werden, um einen Fehler darzustellen, wenn eine Seite `notFound` zurückliefert
 
 ---
@@ -190,16 +192,24 @@
 
 - Jede Route kann eine Layout-Komponente haben
 - Dieser Komponente wird die darzustellende Seite als `children`-Property übergeben
+- - ```tsx
+    type MainLayoutProps = { children: React.ReactNode };
+
+    export default function MainLayout({ children }: MainLayoutProps) {
+      return <main>{children}</main>;
+    }
+    ```
+
 - Layout-Komponenten können verschachtelt sein
 - Wenn eine Route keine Layout-Komponente hat, wird im Baum oberhalb nach der nächstgelegenen Layout-Komponente gesucht
 - Die Layout-Komponente für die Root-Route ist _pflicht_. Hier muss eine ganze HTML-Seite beschrieben werden
-- ```typescript
+- ```tsx
   // /app/layout.tsx
-  export default function Layout({children}) {
+  export default function Layout({children}: {children: ReactNode}) {
     return <html>
-       <head>...</head>
+       <head><title>Recipify</title></head>
        <body>
-         <header><Navigation /></header>
+         <header>Recipify!</header>
          <main>{children}</main>
        </body>
       <html>
@@ -214,17 +224,11 @@
   - Mit einem entsprechenden Plug-in für TypeScript soll die sogar typsicher sein, so dass man keine Routen-Angaben hinschreiben kann, die es gar nicht gibt
     - (hat bei mir beim letzten Versuch nur eingeschränkt funktioniert)
 - Verwendung ähnlich wie auch vom React Router (und `a`-Element) gewohnt:
-  - `<Link href="/">Home</Link>`
 
----
-
-### Demo: Eine React Server Komponente
-
-- **Alle** Komponenten in Next.js sind per Default **Server Components**
-  - Ausnahmen (Client Komponenten) müssen explizit gekennzeichnet werden (dazu später mehr)
-- <!-- .element: class="demo" --> Landing-Page `/page.tsx`
-- <!-- .element: class="demo" -->`/layout.tsx`
-- <!-- .element: class="demo" -->`console.log` in `page`-Komponente
+* ```tsx
+  import Link from "next/link";
+  <Link href="/">Home</Link>;
+  ```
 
 ---
 
@@ -238,7 +242,7 @@
 
 ---
 
-### Hinweis: Next.js Caching
+### Warnung: Next.js Caching
 
 - Achtung! Next.js hat sehr aggressives Caching eingebaut
   - Wenn ihr "komisches" Verhalten feststellt, könnt ihr probieren:
@@ -250,21 +254,33 @@
 
 ### Übung: Getting started!
 
-- Baue eine LandingPage (`/`-Route)
-- Die muss nicht hübsch sein
-  - wenn Du willst, kannst Du CSS-Modules und/oder Tailwind für Styling verwenden
-  - unter `app/components` findest Du auch ein paar Basis-Komponenten (Button, Überschriften etc.), die Du benutzen kannst, wenn Du möchtest
+- Baue die "Landing Page" für die Root-Route (`/`) im `app`-Verzeichnis
+- Die Seite muss nicht hübsch sein
+  - heute gilt: wir machen Bauhaus-Style, "form follows function" 😉
+  - unter `app/components` findest Du aber ein paar Basis-Komponenten (Button, Überschriften etc.), die Du benutzen kannst, wenn Du möchtest
+  - und wenn Du willst, kannst Du Tailwind für Styling verwenden
 - Die Komponente soll einen Link auf `/recipes` rendern
   - Verwende dazu die `Link`-Komponente des Next.js Routers
-- Füge außerdem ein `console.log`-Statement in deine Komponente hinzu, das beim Rendern die aktuelle Uhrzeit ausgibt
-- Lege außerdem eine Komponente für die Route `/recipes` an
+  - Achtung! Ein `Link` hat keine Styles, sieht dewegen wie Text aus! Du kannst einen `Link` aber zum Beispiel der `Button`-Komponente übergeben
+- Lege die Komponente für die Route `/recipes` an
   - Es reicht, wenn diese Komponente erstmal nur "Hello World" ausgibt.
-  - Die `page.tsx`-Datei dafür muss in das Verzeichnis `app/recipes/page.tsx`
-- Wenn die Seite fertig ist:
-  - Führe einen "echten" Build für die Anwendung aus (`pnpm build`, oder `yarn build` oder `npm run build`)
-  - Starte die _fertige_ Anwendung, die auf Port 3080 läuft (`pnpm start`)
-  - Wann und wo wird dein `console.log` ausgegeben?
-- Mögliche Lösung findet ihr in `steps/10_getting_started`
+  - In welches Verzeichnis muss die `page.tsx`-Datei für diese Route?
+- Wenn deine neuen Routen funktionieren:
+  - Füge ein `console.log`-Statement in deine Komponenten hinzu, das beim Rendern die aktuelle Uhrzeit ausgibt
+  - wo und wann wird das Log-Statement ausgegeben?
+- **Optional**: Kannst Du eine `layout`-Komponente bauen, die für Routen innerhalb `/recipes` gilt, aber nicht für die Root-Route (`/`)
+  - Du kannst dir selbst ein einfaches Layout ausdenken, oder diese Komponente verwenden: `RecipesPageLayout`
+- Mögliche Lösung findest Du in `schritte/10_routen_und_links`
+
+---
+
+### Demo: Eine React Server Komponente
+
+- **Alle** Komponenten in Next.js sind per Default **Server Components**
+  - Ausnahmen (Client Komponenten) müssen explizit gekennzeichnet werden (dazu später mehr)
+- <!-- .element: class="demo" --> Landing-Page `/page.tsx`
+- <!-- .element: class="demo" -->`/layout.tsx`
+- <!-- .element: class="demo" -->`console.log` in `page`-Komponente
 
 ---
 
@@ -293,10 +309,77 @@
 
   - Next.js-spezifisch nur die `page`-Konvention
 
-- <!-- .element: class="demo" -->PostListPage anlegen
+- <!-- .element: class="demo" -->recipes/page.tsx anlegen
 
-- <!-- .element: class="demo" -->DB-Zugriff mit `getBlogTeaserList`
-- <!-- .element: class="demo" -->statische Komponente bislang! Build! console.log!
+- <!-- .element: class="demo" -->DB-Zugriff mit `fetchRecipes`
+- <!-- .element: class="demo" -->weiterhin eine statische Komponente bislang! Build! console.log!
+
+---
+
+### React Server Components können asynchron sein
+
+- React Server Components (RSC) werden **nicht auf dem Client** ausgeführt!
+  - Ihr könnt dort keine Event Handler etc. verwenden. Auch Hooks (z.B. `useState`) gehen nicht.
+- Dafür könnt ihr eine RSC als `async function` implementieren
+- Innerhalb der RSC könnt ihr dann mit Promises arbeiten und mit `await` auf diese warten
+- Ihr könnt z.B. `fetch`-Aufrufe machen, Datenbank-Zugriffe oder die Node.JS API verwenden, um Dateien von der Festplatte zu lesen
+  - ```tsx
+    export default async function RecipeList() {
+      // Dieser Fetch-Call wird im Next.js-Backend (!) ausgeführt!
+      const response = await fetch("http://localhost:8100/api/recipes");
+      const recipes = await response.json();
+      //
+      return <RecipeList recipes={recipes} />;
+    }
+    ```
+
+---
+
+### Überbrücken der Wartezeit
+
+- Was passiert, wenn wir die `RecipeList` (`/recipes`) aufrufen und der `fetch`-Call "lange" dauert? 🤔
+- Was passiert, wenn wir die `/recipes`-Route zweimal hintereinander aufrufen? 🤔
+
+---
+
+### Platzhalter für Wartezeiten
+
+- Während eine Route gerendert wird, kann Next.js eine Fallback- bzw. Platzhalter-Komponente anzeigen
+- Diese wird solange dargestellt, bis alle Promises in der Routen-Komponente aufgelöst werden konnten
+  - Die Platzhalter-Komponente wird an derselben Stelle im Layout dargestellt, wie auch die Routen-Komponente
+  - Wenn die Routen-Komponente fertig gerendert wurde, wird nur der Bereich ausgetauscht
+- Die Datei für eine Platzhalter-Komponente muss `loading.tsx` heißen und per `export default` eine Komponenten-Funktion exportieren
+- Was du in dieser Komponente machst, bleibt dir überlassen
+- `loading.tsx`-Dateien in tieferen Verzeichnissen überschreiben dabei `loading.tsx`-Dateien in höheren Verzeichnissen
+  - oder umgekehrt: wenn in dem angeforderten Routen-Verzeichniskeine `loading.tsx`-Datei vorhanden ist, schaut Next.js in den höherliegenden Verzeichnissen
+  - wird keine `loading.tsx`-Datei gefunden, bleibt die Seite weiß...
+- ```tsx
+    // recipes/loading.tsx
+    export default Loading() {
+      return <div className={"LoadingSpinner"}>Please Wait...</div>
+    }
+  ```
+
+---
+
+### Caching
+
+- Eine einmal gerenderte Route wird von Next.js gecached.
+- Das passiert im Browser und im Backend selbst
+  - Wo und wie lange, hängt von einer ganzen Reihe von Faktoren ab
+  - Zusätzlich werden auch die Ergebnisse von `fetch`-Aufrufen gecached
+- Das Caching ist in der [Dokumentation beschrieben](https://nextjs.org/docs/app/building-your-application/caching)
+
+---
+
+### Rendering Modes in Next.js
+
+<!-- .element: class="demo" -->nach Einzel-Seite
+
+- Routen können **statisch** oder **dynamisch** gerendert werden:
+  - Wenn Next.js alle Informationen zu einer Route schon zur Buildzeit hat, wird es eine **statische** Route.
+  - Dynamische Routen werden bei jedem Request neu erzeugt (z.B. bei variablen Pfad-Segmenten)
+  - Das lässt sich in beiden Fällen (zumindest teilweise) pro Route auch ändern
 
 ---
 
@@ -306,77 +389,124 @@
 
 ---
 
-## Suspense
+# Zod
 
-- Suspense unterbricht das Rendern, wenn in einer Komponente "etwas" fehlt
-- "Etwas" ist im Fall von RSC ein Promise, das nicht aufgelöst ist
-- Dazu kann um eine Komponente die `Suspense`-Komponente von React gelegt werden
-- ```typescript
-  async function loadData(...) {}
+---
 
-  async function PostList() {
-    const posts = await loadData();
+- "TypeScript-first schema validation with static type inference"
+- https://zod.dev/
 
-    return <>...</>;
-  }
+---
 
-  function PostListPage() {
-    return <Suspense> fallback={"Please wait"}>
-      <PostList />
-    </Suspense>
+### TypeScript vs. JavaScript
+
+<!-- .slide: class="left" -->
+
+- Im folgenden ist mit **TypeScript** das Typsystem von TypeScript gemeint, das nur zur Buildzeit vorhanden ist
+- Mit **JavaScript** ist der Code gemeint, den wir in JavaScript oder TypeScript schreiben, und der dann auch im Browser (als JavaScript) ausgeführt wird
+
+* ```typescript
+  // "TypeScript": zur Laufzeit weg
+  type User = { lastname: string; firstname?: string };
+
+  // "JavaScript"
+  function login() {
+    return { lastname: "Meier", firstname: null };
   }
   ```
 
-- Hier würde React zunächst die `fallback`-Komponente (`Please wait`) rendern und darstellen
-- Wenn das Promise aufgelöst wird, rendert React dann die Komponente erneut für die finale Darstellung
-- Das geht auf dem Server und dem Client
-  - Client für Lazy-Loading und Data-Fetching (letzteres noch unstabil)
+---
+
+### Problem: TypeScript-Typen sind zur Laufzeit weg
+
+- Wenn man ein Objekt beschrieben hat, kann man das zur **Laufzeit** nicht mit TypeScript überprüfen
+  - Hat uns der Server zur Laufzeit wirklich ein Objekt geschickt, das aussieht wie ein `User`?
+- Für "echte" Validierungen sind TypeScript-Typen auch zu ungenau:
+  - keine Wertebegrenzungen (bzw. nur sehr eingeschränkt)
+  - Längen-Begrenzungen gibt es nicht
+- Wenn man Validierung zur Laufzeit benötigt, kommt man um (JavaScript-)Code, der zur Laufzeit ausgeführt wird, nicht drumherum
+- Also müssen die Validierungsregeln in JavaScript beschrieben werden.
+- Dann sind diese aber redundant: in TypeScript (statische Typbeschreibung), in JavaScript zur Validierung während der Laufzeit
 
 ---
 
-### Suspense in Next.js
+### Zod: Typen in JavaScript beschreiben und TS-Typen ableiten
 
-- Um die oberste Komponente einer Route (`page.tsx`) legt Next.js eine automatisch eine `Suspense`-Komponente
-- Den `fallback` dafür implementieren wir in der Datei `loading.tsx`, die eine Komponente per `default export` exportieren muss
-- Konzeptionell sieht das so aus:
+- Aus dieser Not macht Zod eine Tugend:
+- Wir beschreiben die Objekte in JavaScript...
+- ...und können von der Beschreibung TypeScript Typen ableiten lassen
+- ```typescript
+  import { z } from "zod";
 
-  - Eure Route:
-  - ```typescript
-    // loading.tsx
-    export default function Spinner() { return "Please Wait" };
+  const User = z.object({
+    firstName: z.string(),
+    lastName: z.string().nullish(),
+  });
 
-    // page.tsx
-    export default async function PostListPage() {
-      const data = await loadData();
-      return <>...</>
-    }
-    ```
+  type IUser = z.infer<typeof User>;
+  ```
 
-  - Next.js (dummy code)
-  - ```typescript
-    // Next.js (dummy code):
-    import Fallback from "loading.tsx"
-    import Page from "page.tsx";
+- Mit dem `User`-Objekt von zod können wir nun zur Laufzeit ein Objekt validieren
+- Wenn das Objekt dem User-Schema entspricht, ist alles gut, sonst gibt es einen Fehler
+- ```typescript
+  const mayOrMayNotBeAUser = readUserFromServer();
 
-    function Route() {
-      return <Suspense fallback={Fallback}>
-        <Page />
-      </Supsense>;
-    }
-    ```
+  const user = User.parse(mayOrMayNotBeAUser);
+  ```
+
+- Die `parse`-Funktion fungiert gleichzeit als **Type Predicate Function**, so dass TypeScript
+  danach auch weiß, wie `user` aussieht, unabhängig davon, was in `parse` übergeben wurde
+- ```typescript
+  declare function readUserFromServer(): unknown;
+
+  const user = User.parse(readUserFromServer());
+  //     ^? --> IUser
+  ```
 
 ---
 
-## Übung: DataFetching
+### Komplexe Regeln
 
-- Vervollständige die `/blog`-Route
-  - Darin mit `getBlogTeaserList` die Daten laden und anzeigen
-    - Zur Darstellung der geladenen Posts kannst Du die Komponente `PostTeaser` verwenden oder was eigenens bauen
-  - Was passiert, wenn die Daten nur sehr langsam geladen werden?
-    - Verlangsame dazu den Zugriff auf die Datenbank künstlich, in dem Du in `backend-queries.ts` mit der Konstante `getBlogTeaserListSlowdown` eine künstliche Verzögerung festlegst (in Millisekunden, z.B. 1600)
-  - Füge eine Loading-Komponente (`loading.tsx` hinzu), die eine Warte-Meldung ausgibt
-  - **Anstatt** der Loading-Komponenten:
-    - kannst Du in `layout.tsx` um die `children` eine `React.Suspense`-Komponente legen? Was passiert dann?
+- Mit Zod kann man die typischen Datentypen verwenden (Objekte, Arrays, string, number, boolean etc)
+- Auch aus TypeScript bekannte Möglichkeiten wie `unions`, `extends`, `omit` oder `brand-Types` werden unterstützt
+- Darüberhin kann man auch die gültigen Wertemengen und andere Constraints beschreiben
+- ```typescript
+  import { z } from "zod";
+
+  const User = z.object({
+    login: z.string().min(5),
+    email: z.string().email(),
+    status: z.string().emoji(), // 😊
+    age: z.number().min(18).max(123),
+  });
+  ```
+
+- Die `parse`-Funktion gibt dann detailierte Fehler, wenn ein überprüftes Objekt nicht diesen Regeln entspricht.
+- Das funktioniert mittlerweile auch für das Validieren von Formularen in [React Hook Form
+  ](https://react-hook-form.com/) mit dem [zod-Resolver](https://github.com/react-hook-form/resolvers#zod)
+
+---
+
+### Zod und Next.js
+
+- Ob ihr Zod in eurer Anwendung einsetzt, bleibt natürlich euch überlassen
+- In der Beispiel-Anwendung wird Zod verwendet, um Daten, die von der Backend API gelesen wurden zu validieren
+
+---
+
+### Übung: Asynchrone Server Komponenten
+
+- **Baue die Komponente für die Rezept Übersicht (`/recipes`)**
+- Du musst deine bestehende Komponente (`/app/recipes/page.tsx`) nun erweitern:
+  - sie soll asynchron sein
+  - Die Funktion zum Laden der Rezepte ist schon fertig: `fetchRecipes`
+  - Die geladenen Rezepte kannst Du mit der ferigen Komponente `RecipeCard` rendern
+- Baue eine `loading`-Komponente, die angezeigt wird, während die Daten geladen werden
+  - Gib darin einfach "irgendwas" aus oder verwende die fertige Komponente `GlobalLodingIndicator`
+  - Um die Komponente zu testen, kannst Du das Laden der Daten künstlich verzögern:
+    - gehe dazu in `demo-config.ts` und setze `slowDown_GetRecipeList` z.B. auf `1600` (Verzögerung von 1,6 Sekunden)
+- Du findest Ausgangsmaterial mit weiteren Hinweisen in `schritte/20_async_rsc/ausgang`
+- Eine Lösung findest Du in `schritte/20_async_rsc/fertig`
 
 ---
 
@@ -401,18 +531,22 @@
 
 ### Mehr zu Next.js Routen
 
-- Ein Pfad in eckigen Klammern (`/blog/[postId]`) definiert einen Platzhalter. Der Wert für das Segment in der URL wird der Komponente dann zur Laufzeit als Property übergeben:
-  - `/blog/P1`, `/blog/xyz` etc.
+- Ein Pfad in eckigen Klammern (`/recipes/[recipeId]`) definiert einen Platzhalter. Der Wert für das Segment in der URL wird der Komponente dann zur Laufzeit als Property an die Routen-Komponente übergeben
+- Die Properties, die eine Routen-Komponente bekommt, sind von Next.js vorgegeben
+- Die Werte für die variablen Segmente werden als Objekt mit dem Namen `params` übergeben
+- Darin enthalten ist der Wert für jedes variable Segment(`[recipeId]`) ohne die eckigen Klammern (`recipeId`):
 - ```typescript
-  // /app/blog/[postId]/page.tsx
+  // /app/recipes/[recipeId]/page.tsx
 
-  type BlogPostPageProps = {
-    params: { postId: string };
+  type RecipePageProps = {
+    params: { recipeId: string };
   };
 
-  export default function PostPage({ params }: BlogPostPageProps) {
-    // params.postId enthält den Wert aus der URL (P1, xyz, ...)
-    const postId = params.postId;
+  export default function RecipePage({ params }: RecipePageProps) {
+    // params.recipeId enthält den Wert aus der URL (R1, R2, ...)
+    const recipeId = params.recipeId;
+
+    // ...
   }
   ```
 
@@ -420,24 +554,31 @@
 
 ### Mehr zu Next.js Routen
 
-- Mit der `notFound`-Funktion kann die `not-found`-Komponente aufgerufen werden
+- Mit der `notFound`-Funktion kann die [`not-found`-Komponente](https://nextjs.org/docs/app/api-reference/file-conventions/not-found) gerendert werden
 - Das ist zum Beispiel nützlich, wenn Daten geladen wurden, die es nicht gibt
 - `notFound` bricht die Ausführung der Komponenten-Funktion ab, man braucht kein `return` hinzuschreiben
-- ```typescript
-  // /app/blog/[postId]/page.tsx
-    export default async function PostPage({params}: BlogPostPageProps) {
-    const postId = params.postId;
+- ```tsx
+  // /app/recipes/[recipeId]/page.tsx
+  import { notFound } from "next/navigation";
+  export default async function RecipePage({ params }: RecipePageProps) {
+    const recipeId = params.recipeId;
 
-    const blogPost = await getBlogPost(postId);
-    if (!blogPost) {
-      notFound();  // kein return notwendig
+    const recipe = await fetchRecipe(postId);
+    if (!recipe) {
+      notFound(); // kein return notwendig
     }
 
-    return <Post post={blogPost} />;
+    return <Receipe recipe={recipe} />;
   }
   ```
 
-- <!-- .element: class="demo" -->Beispiel zeigen. Suspense-Verhalten ?!
+- In der Datei `not-found.tsx` kannst Du dann per `export default` eine Komponente exportieren, die im Fehlerfall angezeigt wird
+- ```tsx
+  // /app/recipes/[recipeId]/not-found.tsx
+  export default function RecipeNotFound() {
+    return <div>Recipe not found :-(</div>;
+  }
+  ```
 
 ---
 
@@ -452,6 +593,84 @@
 
 ---
 
+### Übung: eine dynamische Route
+
+- **Implementiere die Route zur Einzeldarstellung eines Rezepts**
+- Das Verzeichnis ist `app/recipes/[recipeId]`
+- Lies in der Komponente die `recipeId` aus dem `params`-Objekt das als `props` an die Komponente übergeben wird
+- Dann kannst du die fertige Funktion `fetchRecipe` verwenden, um das Rezept zu laden
+  - Wenn diese Funktion `null` zurückgibt, wurde das Rezept nicht gefunden, dann verwende `notFound()` um die Fehler-Komponente zu rendern
+  - Wenn diese Funktion ein Rezept zurückliefert, kannst Du das an die fertige `RecipePageContent`-Komponente übergeben
+- Was passiert, wenn ein Rezept nicht gefunden wurde? Testen kannst du das, in dem Du z.B. `/recipes/123` aufrufst
+- Eine Lösung findest Du in `schritte/30_dynamic_segments`
+- **Optional**: baue eine `not-found`-Komponente, die einen Fehler anzeigt, wenn ein Rezept nicht gefunden wurde
+
+---
+
+## Suspense
+
+- Suspense unterbricht das Rendern, wenn in einer Komponente "etwas" fehlt
+- "Etwas" ist im Fall von RSC ein Promise, das nicht aufgelöst ist
+  - Am Beispiel der `loading`-Komponente haben wir das schon gesehen (dort aber abstrahiert von Next.js)
+- Dazu kann um eine Komponente die `Suspense`-Komponente von React gelegt werden
+- ```tsx
+  async function loadData(...) {}
+
+  async function RecipeList() {
+    const posts = await loadRecipes();
+
+    return <>...</>;
+  }
+
+  function RecipeListPage() {
+    return <Suspense> fallback={"Please wait"}>
+      <RecipeList />
+    </Suspense>
+  }
+  ```
+
+- Hier würde React zunächst die `fallback`-Komponente (`Please wait`) rendern und darstellen
+- Wenn das Promise aufgelöst wird, rendert React dann die Komponente erneut für die finale Darstellung
+- Das funktioniert mit "modernen" Bibliotheken übrigens auch in "klassischen" Single-Page-Anwendungen mit React
+  - siehe zum Beispiel [useSuspenseQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useSuspenseQuery) von TanStack/React Query
+
+---
+
+### Suspense in Next.js
+
+- Um die oberste Komponente einer Route (`page.tsx`) legt Next.js eine automatisch eine `Suspense`-Komponente
+- Den `fallback` dafür implementieren wir in der Datei `loading.tsx`, die eine Komponente per `default export` exportieren muss
+- Konzeptionell sieht das so aus:
+
+  - Eure Route:
+  - ```tsx
+    // loading.tsx
+    export default function Spinner() {
+      return "Please Wait";
+    }
+
+    // page.tsx
+    export default async function RecipeListPage() {
+      const data = await loadData();
+      return <>...</>;
+    }
+    ```
+
+  - Next.js (dummy code!!!)
+  - ```typescript
+    // Next.js (dummy code):
+    import Fallback from "loading.tsx"
+    import Page from "page.tsx";
+
+    function Route() {
+      return <Suspense fallback={Fallback}>
+        <Page />
+      </Supsense>;
+    }
+    ```
+
+---
+
 ### Streaming
 
 - Wenn eine Komponente auf dem Server gerendert wird, kann React das Rendern bei einer `Suspense`-Komponente unterbrechen
@@ -463,29 +682,23 @@
 
 ### Wasserfall-Requests
 
-- Die `BlogPostPage`-Komponente benötigt Daten aus zwei Quellen: Den Blog-Post und die Kommentare
+- Die `RecipePage`-Komponente benötigt Daten aus zwei Quellen: Das Rezept und dessen Bewertungen
 - Die Antwortzeit der beiden Requests dafür kann bei jedem Aufruf unterschiedlich lang sein
 - In einer klassischen React-Architektur könnte es zu einem "Request-Wasserfall" kommen:
-  - BlogPost lädt den Artikel (z.B. `useFetch`) und rendert sich dann damit
-  - Beim rendern bindet sie die `Comments`-Komponente ein. Diese lädt nun (ebenfalls) per `fetch` ihre Daten und stellt sich dar.
+  - RecipePage lädt die Rezept-Daten (`fetchRecipe`). So lange wird der Platzhalter angezeigt
+  - Dann wird die `ReceipePageContent`-Komponente gerendert
+  - Diese verwendet die `FeedbackList`-Komponente ein. Diese lädt nun (ebenfalls) per `fetch` ihre Daten und stellt sich dar.
   - Die beiden Requests starten also nicht zeitgleich, und die Dauer, bis die Daten vollständig angezeigt werden können, setzt sich aus der Dauer der **beiden** Requests zusammen
 - Kennt ihr das Problem? Meint ihr das ist ein Problem? Was könnte man dagegen tun 🤔
-
----
-
-### Einzeldarstellung
-
-- <!-- .element: class="demo" --> Page
-- <!-- .element: class="demo" --> static vs dynamic rendering
 
 ---
 
 ### Wasserfälle vermeiden
 
 - Mit `Suspense` können wir grundsätzlich priorisieren, was uns wichtig(er) ist:
-  1. Die Seite wird erst dargestellt, wenn alle Daten geladen sind
-  2. Sobald "irgendwelche" Daten (Artikel oder Kommentare) geladen wurden, diese Daten sofort anzeigen.
-  3. Erst wenn die Artikel geladen wurden, diese darstellen (Falls Kommentare "schneller" sind, die Kommentare nicht vorab anzeigen)
+  1. Die Seite wird erst dargestellt, wenn **alle** Daten geladen sind
+  2. Sobald "irgendwelche" Daten (Rezept **oder** Feedback) geladen wurden, diese Daten sofort anzeigen.
+  3. Auf die **Rezepte warten**, und die Seite erst dann darstellen. Falls Bewertungen "schneller" sind, die Bewertungen nicht vorab anzeigen.
 - <!-- .element: class="demo" --> Die ersten beiden Beispiel durchgehen
 - <!-- .element: class="demo" --> Wie können wir das dritte Umsetzen? 🤔
 
@@ -494,38 +707,59 @@
 ### Wasserfälle vermeiden
 
 - Mit `Suspense` können wir grundsätzlich priorisieren, was uns wichtig(er) ist:
-  1. Die Seite wird erst dargestellt, wenn alle Daten geladen sind
-  2. Sobald "irgendwelche" Daten (Artikel oder Kommentare) geladen wurden, diese Daten sofort anzeigen.
-  3. Erst wenn die Artikel geladen wurden, diese darstellen (Falls Kommentare "schneller" sind, die Kommentare nicht vorab anzeigen)
-- Für 1. setzen wir ein `Suspense` um die ganze Seite (z.B. in `loading.tsx`)
-- Für 2. setzen wir jeweils ein `Suspense` um die Komponente, in der die Daten geladen werden
+  1. Die Seite wird erst dargestellt, wenn **alle** Daten geladen sind
+  2. Sobald "irgendwelche" Daten (Rezept **oder** Feedback) geladen wurden, diese Daten sofort anzeigen.
+  3. Auf die **Rezepte warten**, und die Seite erst dann darstellen. Falls Bewertungen "schneller" sind, die Bewertungen nicht vorab anzeigen.
+- Für 1. setzen wir ein `Suspense` um die ganze Seite (z.B. in dem wir `loading.tsx` verwenden)
+- Für 2. setzen wir jeweils ein `Suspense` um die **Komponente**, in der die Daten geladen werden
 - Für 3. starten wir beide Requests sofort parallel beim Rendern der Page-Komponente
-  - Diese wartet dann auf den Artikel-Request (`await articleRequestPromise`)
-  - Das Promise für den Kommentare-Request wird an die `Comments`-Komponente gegeben
-  - In der `Comments`-Komponente wird auf die Daten gewartet (`await commentsRequestPromise`)
-  - Um die `Comments`-Komponente herum wird eine `Suspense`-Komponente gelegt.
+  - Diese wartet dann auf den Rezept-Request (`await fetchRecipe`)
+  - Das Promise für den Bewertungen-Request wird an die `FeedbackList`-Komponente gegeben
+  - In der `FeedbackList`-Komponente wird auf die Daten gewartet (`await fetchFeedback`)
+  - Um die `FeedbackList`-Komponente herum wird eine `Suspense`-Komponente gelegt.
 
 ---
 
 ### Übung: Suspense und Streaming
 
-- Implementiere die Route zur Darstellung eines einzelnen BlogPosts (`/app/blog/(content)/post/[postId]/page.tsx`)
-- Lade in der Komponente die Daten des Artikels und dessen Kommentare
-  - Dazu kannst Du aus `backend-queries.ts` die Funktionen `getBlogPost` und `getComments` verwenden
-- Zeige die geladenen Daten an (Du kannst die `Post` bzw `CommentList`-Komponente verwenden)
-- Überlege dir, wo Du Suspense-Blöcke setzen möchtest, und füge sie dementsprechend ein
-  - Um die Ladezeiten künstlich zu verlangsamen, kannst Du die Konstanten `getBlogPostSlowdown` und `getCommentsSlowdown` in `backend-queries.ts` verwenden.
-- Füge in `/app/blog/page.tsx` für jeden Post-Teaser einen Link auf die jeweilige BlogPost-Seite hinzu
-  - Wenn du die `PostTeaser`-Komponente zur Darstellung verwendest, passiert das schon automatisch
-- Lösung in `steps/30_suspense`
+- **Lade die Bewertungen zu einem Rezept**
+- Die Route `/app/recipe/[recipeId]/page.tsx` verwendet die `RecipePageContent`-Komponente um das Rezept darzustellen
+- In der `RecipePageContent`-Komponente musst du nun noch die Bewertungen laden (`fetchFeedback`) und mit der `FeedbackListLoader`-Komponente anzeigen
+  - (Die `fetchFeedback`-Funktion und die `FeedbackListLoader`-Komponente sind bereits fertig)
+- Überlege dir, an welchen Stellen es aus deiner Sicht fachlich Sinn macht auf Daten zu warten und setze die `Suspense`-Komponente entsprechend
+  - Du kannst die beiden Requests künstlich langsam machen, in dem Du in `demo-config.ts` bei `slowDown_GetRecipe` und `slowDown_GetFeedbacks` einen Timeout (in ms) einstellst.
+- Falls du bei der vorherigen Übung nicht fertig geworden bist, kopiere die fertigen Dateien aus `30_dynamic_segments` in deinen Workspace-Ordner.
+- Lösung in `schritte/40_suspense`
 
 ---
 
 ## Aufteilung in Server-Client-Komponenten
 
+---
+
 ### Konsequenzen
 
-<img src="slides%2Fimages%2Freact-anwendung.png" style="max-height:100vh;float:left"/>
+- React Server Component können keine Hooks verwenden und auch sonst nicht interaktiv sein
+- `useState` oder `useEffect` zum Beispiel gehen beide nicht
+- Für alle Stellen, an denen wir Interaktivität benötigen, müssen wir **Client Components** bauen
+- Das sind Komponenten, die sich wie bisherige "klassische" React-Komponenten verhalten:
+  - Ihr JavaScript-Code wird bei Bedarf zum Client geschickt
+  - der JavaScript-Code wird im Client ausgeführt
+- Eine Client-Komponente wird mit der `"use client"`-Direktive am Beginn einer Datei ausgezeichnet:
+- ```tsx
+  "use client";
+
+  export function FeedbackForm() {
+    // hier jetzt Hooks etc. erlaubt
+    const [name, setName] = useState("");
+  }
+  ```
+
+---
+
+### Konsequenzen
+
+<img src="slides%2Fimages%2Freact-anwendung.png" style="max-height:900px;float:left"/>
 
 - **Eine "normale" React-Anwendung im Browser**:
 - State befindet sich oben
@@ -537,7 +771,7 @@
 
 ### Konsequenzen
 
-<img src="slides%2Fimages%2Ffullstack-anwendung.png" style="max-height:100vh;float:left"/>
+<img src="slides%2Fimages%2Ffullstack-anwendung.png" style="max-height:900px;float:left"/>
 
 - **Komponenten auf dem Server**:
 - Auf dem Server gibt es keinen State!
@@ -550,7 +784,7 @@
 
 ### Konsequenzen
 
-<img src="slides%2Fimages%2Finteraktives-muss-auf-den-client.png" style="max-height:100vh;float:left"/>
+<img src="slides%2Fimages%2Finteraktives-muss-auf-den-client.png" style="max-height:900px;float:left"/>
 
 - Bestimmte Teile **müssen** auf den Client
   - alles was mit Interaktion zu tun hat
@@ -562,7 +796,7 @@
 
 ### Konsequenzen
 
-<img src="slides/images/url-aendern.png" style="max-height:100vh;float:left"/>
+<img src="slides/images/url-aendern.png" style="max-height:900px;float:left"/>
 
 - Properties müssen Client-Server-Grenze überwinden
 - Müssen serialisierbare Daten sein
@@ -584,29 +818,23 @@
   - Ist auf Client-seite interaktiv (JavaScript-Code im Browser vorhanden)
   - Muss eine neue **Darstellung** vom Server anfordern
   - Beispiel, das die Search-Parameter in der URL verändert:
-- ```typescript
+- ```tsx
   "use client";
 
-  import { usePathname, useRouter, useSearchParams } from "next/navigation";
+  import { useSearchParams } from "next/navigation";
 
   export default function OrderByButton({ orderBy, children }) {
-    const router = useRouter();
-    const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const handleClick = () => {
-      const newParams = new URLSearchParams(searchParams);
-      newParams.set("order_by", orderBy);
+    const currentOrderBy = searchParams.get("orderBy");
+    const currentPage = searchParams.get("page");
 
-      // REQUEST NEW PAGE FROM SERVER:
-      router.push(`${pathname}?${newParams.toString()}`);
-    };
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("order_by", orderBy);
 
-    return (
-    <button onClick={handleClick}>
-      {children}
-    </button>
-    );
+    const href = `/recipes?${newParams.toString()}`;
+
+    return <Link href={href}>{children}</Link>;
   }
   ```
 
@@ -618,29 +846,26 @@
 
 - Auf der **Server-Seite**:
   - Statt "klassischer" Props werden hier nun Search Params verwendet
-  - Page/Top-Level-Komponenten in Next.js können sich die Search-Parameter als Property `searchParams` übergeben lassen
-- ```typescript
-
-  type BlogListPageProps = {
-    searchParams: { order_by?: OrderBy };
+  - Routen-Komponenten (`page.tsx`) in Next.js können sich die Search-Parameter als Property `searchParams` übergeben lassen
+    - (`params` für Segmente im Pfad, `searchParams` für die Query-Parameter hinter dem `?` in der URL)
+- ```tsx
+  type RecipeListPageProps = {
+    searchParams: {
+      page?: string;
+      orderBy?: "likes" | "time";
+    };
   };
 
-  export default async function BlogListPage({ searchParams }: BlogListPageProps) {
-    const orderBy = searchParams.order_by || "desc";
+  export default async function RecipeListPage({
+    searchParams,
+  }: RecipeListPageProps) {
+    // 'page' in Zahl konvertieren, 0 als Default
+    const page = parseInt(searchParams.page || "0");
+    const orderBy = searchParams.orderBy;
 
-    const response = await getBlogTeaserList(orderBy);
+    const result = fetchRecipes(page, orderBy);
 
-    return (
-      <div>
-        <div>
-          <OrderByButton orderBy={"desc"}>Desc</OrderByButton>
-          <OrderByButton orderBy={"asc"}>Asc</OrderByButton>
-        </div>
-        {response.posts.map((p) => (
-          <PostTeaser key={p.id} post={p} />
-        ))}
-      </div>
-    );
+    return <ReipceList recipes={result.content} />;
   }
   ```
 
@@ -655,51 +880,47 @@
   - **keine** Verwendung von Server-APIs wie Datenbanken
   - **keine** Verwendung von Browser-spezifischen APIs (z.B. `window` oder hooks)
 - Wenn sie als Server Component verwent werden, wird ihr JavaScript-Code nicht zum Client geschickt
-- Erst wenn sie (auch) als Client Component benötigt werden, wird ihr JS-Code gesendet
-- Beispiel: `Post`-Komponente
-  - In der `BlogPostPage` fungiert sie als RSC
-  - Im `PostEditor` ist sie dann aber eine Client-Komponente
-  - Demo!
+- Next.JS rendert die Client Component serverseitig vor
+- Erst wenn eine Komponente als Client Komponente benötigt wird, der JS-Code vom Server abgefragt
 
 ---
 
-### Konsequenzen: Was bedeuten die neuen Features
-
-- Wird Code durch URL-Handling komplexer?
-
-- Wo ziehen wir Server/Client-Grenze?
-
-  - Button? Ganzes Formular?
-
-- Ganze Seite (oder Teile) werden neu gerendert
-
-  - Fertiges UI kommt dafür vom Server
-  - Das kann mehr Daten als bei (REST-)API-Call bedeuten!
-
-- Was fällt euch noch ein? 🤔
-
----
+[//]: # "### Konsequenzen: Was bedeuten die neuen Features"
+[//]: #
+[//]: # "- Wird Code durch URL-Handling komplexer?"
+[//]: #
+[//]: # "- Wo ziehen wir Server/Client-Grenze?"
+[//]: #
+[//]: # "  - Button? Ganzes Formular?"
+[//]: #
+[//]: # "- Ganze Seite (oder Teile) werden neu gerendert"
+[//]: #
+[//]: # "  - Fertiges UI kommt dafür vom Server"
+[//]: # "  - Das kann mehr Daten als bei (REST-)API-Call bedeuten!"
+[//]: #
+[//]: # "- Was fällt euch noch ein? 🤔"
+[//]: #
+[//]: # "---"
 
 ### Übung: Interaktionen
 
-- Implementiere den **Order By-Button** oder einen **Such-Filter**
-- Die Blog-Liste (`(content)/page.tsx`) verwendet `getBlogTeaserList`, um Daten aus dem Backend zu lesen
-- Du kannst `getBlogTeaserList` `orderBy` und/oder `filter` übergeben
-- Implementiere also entweder einen Button zum Sortieren oder ein Text-Feld, mit dem man einen Filter (Suche) übergeben kann
-  - Zum Testen des Filters kannst Du z.B. den Ausdruck `redux` verwenden, dann müssten zwei Artikel zurückkommen
-- In jedem Fall musst Du eine **Client-Komponente** erzeugen, die in der Lage ist, die Search-Parameter der Anwendung zu verändern
-- Die Search-Parameter verwendest Du dann in `(content)/page.tsx`, um damit zu ermitteln, wie sortiert/nach was gesucht werden soll.
-  - Den aktuell gerenderten Pfad (URL ohne Search-Parameter) bekommst Du mit dem Next.js Hook (`usePathname`)[https://nextjs.org/docs/app/api-reference/functions/use-pathname]
+- **Implementiere den Order-Button**
+- Die Rezept-Liste (`/app/recipes/page.tsx`) soll sortierbar und paginierbar gemacht werden
+- In der Datei `schritte/50_client/ausgang/app/recipes/page.tsx` findest Du dafür TODOs
+  - Du kannst entweder deine eigene `page.tsx`-Datei erweitern, oder du kopierst dir die "ausgang"-Datei in deinen Workspace
+- Es gibt bereits eine fertige Pagination-Komponente (`RecipeListPaginationBar`) diese kannst Du verwenden, um das Paginieren zu testen
+  - Für die Verwendung siehe `schritte/50_client/ausgang/app/recipes/page.tsx`
+- Implementiere dann den `OrderButton` fertig.
+  - In `app/components/recipelistpage/OrderButton.tsx` findest Du dazu todos
   - An die aktuellen Search-Parameter kommst Du mit dem Next.js Hook [`useSearchParams`](https://nextjs.org/docs/app/api-reference/functions/use-search-params)
-  - Einen Seitenwechsel kannst mit `router.push()` machen, wobei du `router` mit dem Next.js Hook [`useRouter()`](https://nextjs.org/docs/app/api-reference/functions/use-router) bekommst.
-- Deine Client-Komponte kannst Du einfach in `(content)/page.tsx` einbinden
 - Analysier doch mal mit Hilfe von `console.log` bzw. der Ausgabe auf der Konsole des `backend`-Prozesses, wann neu gerendert wird
+- Lösung in `schritte/50_client/fertig`
 
 ---
 
 ### useTransition
 
-- <!-- .element: class="demo" -->: `OrderByButton` mit Transition
+- <!-- .element: class="demo" -->: `OrderButton` mit Transition
 - Mit dem `useTransition`-Hook von React (18) können Updates priorisiert werden
 - Dazu wird eine Funktion angegeben, in der eine "Transition" beschrieben ist (z.B. durch das Setzen eines States)
 - Wenn React die Komponente daraufhin neu rendert, **und** eine weitere/andere State-Änderung durchgeführt wird, bricht React das rendern ab (und startes es ggf. später neu)
@@ -718,7 +939,7 @@
 - Wenn man einen von einer Seite auf eine andere Seite mit dem Next.js Router durchführt, kann man mit `useTransition` auf der Ursprungsseite bleiben, bis die Ziel-Seite fertig gerendert ist
   - Die Ziel-Seite wird dann in Hintergrund gerendet, und solange ist `isPending` `true`
 - ```tsx
-  export function OrderByButton() {
+  export function OrderButton() {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
@@ -747,7 +968,6 @@
 * Meiner Erfahrung nach ist das nicht trivial zu verstehen und scheint auch noch Bugs zu haben
 * Es gibt eine [ausführlichen Dokumentation](https://nextjs.org/docs/app/building-your-application/caching), welche Caches es gibt und wie die jeweils funktionieren
   - Darin enthalten ist auch eine [Matrix](https://nextjs.org/docs/app/building-your-application/caching#apis), aus der hervorgeht, welche Next.js Funktionen Auswirkungen auf den Cache haben
-  - 👨‍🏫 Morgen machen wir eine Klassenarbeit, dann frage ich die Matrix ab 😈
 
 ---
 
@@ -756,7 +976,7 @@
 - Man kann die einzelen Cachings ausschalten, bzw. revalidieren lassen
 - Bei `fetch`-Requests kann man ein Next.js-proprietäres Property angeben:
 - ```typescript
-  fetch("https://blog-api.de", {
+  fetch("https://recipify.de/api/recipes", {
     // Next-proprietäre Erweiterung der fetch-API:
     next: {
       // Nach einer Minute Cache verwerfen
@@ -767,9 +987,9 @@
 - Einem `fetch`-Request können außerdem **Tags** zugeordnet werden
 - Diese kann man verwenden, um den Cache-Eintrag per API als veraltet zu markieren
 - ```typescript
-  const r = await fetch(`http://localhost:7002/posts`, {
+  const r = await fetch(`https://recipify.de/api/recipes`, {
     next: {
-      tags: ["teaser"],
+      tags: ["recipes"],
     },
   });
   ```
@@ -777,10 +997,10 @@
   // Invalidieren des Caches:
   import { revalidateTag } from "next/cache";
 
-  revalidateTag("teaser");
+  revalidateTag("recipes");
   ```
 
-- Alternativ geht das auch mit Pfaden (`revalidatePath`), aber das scheint noch Buggy zu sein.
+- Alternativ geht das auch mit Pfaden (`revalidatePath`), da könnt ihr einen Pfad angeben
 - Wie lange eine statische **Route** gecached werden soll, kann mit [`revalidate`](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate) festgelegt werden
   - Davon unbenommen ist aber das fetch-Caching (s.o.)
 - Wichtig! Das funktioniert nur in serverseitigem Code!
@@ -813,111 +1033,107 @@
   - Invalidieren des Caches mit `revalidatePath` bzw. `revalidateTags`
 - Möglichkeit 3:
   - `noStore()` verwenden, damit wird eine Route vom Caching ausgenommen
-  - Das scheint aber aber nur zu funktionieren, wenn eine Route erneut vom Browser abgefragt wird. Wenn eine Route bereits im **Client-Cache** ist, wird diese ausgeliefert
 
 ---
 
 ### Server Actions
 
-- **Server Actions** sind (asynchrone) Funktionen, die auf dem Server aufgerufen und aus einer (Client-)Komponente aufgerufen werden können
+- <!-- .element: class="demo" -->Like Action!
+- **Server Actions** sind Funktionen, die auf dem Server laufen und aus einer Client-Komponente aufgerufen werden können
 
   - Eine Art remote-procedure Call
   - React bzw. Next.js stellt für jede Server-Action-Funktion transparent einen HTTP-Endpunkt zur Verfügung
   - Die Funktion kann beliebige Parameter entgegen nehmen und zurückliefern
     - Einschränkung: Werte müssen serialiserbar sein
-  - ```typescript
-    export async function savePost(title: string, body: string) {
-      try {
-        await db.save(title, body);
-      } catch (e) {
-        return { success: false, error: e.toString() };
-      }
+    - Die Funktion **muss** asynchron sein, da die Kommunikation immer asynchron ist
+    - Die Funktionen müssen in einer Datei stehen, die explizit mit `"use server"` gekennzeichnet ist
 
-      return { success: true };
-    }
-    ```
-
-  - Der Aufruf erfolgt aus der Komponente wie bei einer normalen Funktion
-  - ```typescript
-    function PostEditor() {
-      const onSaveClick = async () => {
-        // SERVER REQUEST !
-        savePost(title, body);
-      };
-
-      // ...
-    }
-    ```
-
----
-
-### Server Actions
-
-- Server-Actions können als Inline-Funktion direkt innerhalb einer **Server Komponente** implementiert werden
-
-  - Dann muss die Funktion mit der Direktive `"use server"` gekenntzeichnet werden
-  - Die Funktion kann dann als Property an eine Client-Komponente weitergegeben werden
-  - ```typescript
-    // RSC
-    export default async function PostEditorPage() {
-      async function savePost(title: string, body: string) {
-        "use server";
-        // ...
-      }
-
-      return <PostEditor savePost={savePost} />
-    }
-    ```
-
-  - ```typescript
-    "use client";
-
-    type Props = { savePost: (title: string, body: string) => Promise<Result> };
-
-    export function PostEditor({ savePost }: Props) {
-      const handleSave = async () => {
-        // SERVER REQUEST!
-        await savePost(title, body);
-        router.refresh();
-      };
-    }
-    ```
-
----
-
-### Server Actions
-
-- In **Client Komponenten** können _keine_ Server Actions implementiert werden. Alternativ können sie aber in einer eigenen Datei implementiert werden.
-- Dann muss diese Datei mit `"use server"` gekennzeichnet weden.
-- In dem Fall werden **alle** exportierten Funktionen in der Datei als Server Actions interpretiert (und entsprechende Endpunkte zur Verfügung gestellt)
 - ```typescript
-  // blog-server.actions.ts
   "use server";
-  export async function savePost(title: string, body: string) {
-    /* ... */
-  }
-  export async function deletePost(postId: string) {
-    /* ... */
+
+  export async function addLike(recipeId: string) {
+    const result = await addLikeToRecipe(receipdId);
+
+    return { newLikes: result.newLikes };
   }
   ```
-- Eine Client Komponente darf die Server Actions dann importieren und verwenden
 
-  - ```typescript
-    "use client";
+---
 
-    import { savePost } from "./blog-server.actions.ts";
+### Server Actions
 
-    export function PostEditor() {
-      const onSaveClick = async () => {
-        // SERVER REQUEST !
-        await savePost(title, body);
+- Der Aufruf einer Server-Action-Funktion erfolgt aus der Komponente wie bei einer normalen Funktion
+- ```tsx
+  function LikesWidget({ recipe }) {
+    const [likes, setLikes] = useState(recipe.likes);
 
-        router.refresh();
-      };
+    const onSaveClick = async () => {
+      // SERVER REQUEST !
+      const newLikes = await addLike(recipe.id);
+      setLikes(newLikes);
+    };
 
-      // ...
-    }
-    ```
+    return <div onClick={handleLikeClick}>{recipe.likes}</div>;
+  }
+  ```
+
+---
+
+### Aktualisieren der UI
+
+- In dem gezeigten Beispiel wird die Darstellung der Likes aktualisiert, wenn der Request zurückkommt
+- Die gecachte Darstellung, bleibt allerdings unverändert
+- Wenn ein anderer Nutzer die Seite aufruft, wird die alte Darstellung aus dem Cache geliefert und die Anzahl der Likes stimmt nicht
+- Aus diesem Grund muss hier Next.js mitgeteilt werden, welche Routen "revalidiert" werden müssen
+- Das kann mit den gezeigten Funktionen `revalidatePath` bzw. `revalidateTags` passieren
+- ```tsx
+  "use server";
+
+  export async function addLike(recipeId: string) {
+    const result = await addLikeToRecipe(receipdId);
+
+    revalidateTag("recipes"); // Liste mit den Rezepten
+    revalidateTag(`recipes/${recipeId}`); // Einzeldarstellung
+
+    return { newLikes: result.newLikes };
+  }
+  ```
+
+- Das funktioniert in unserem Beispiel deswegen, weil die `fetch`-Aufrufe die für die Liste- bzw. Einzeldarstellung entprechende Tags gesetzt haben:
+
+* ```typescript
+  async function fetchRecipes() {
+    fetch("...", { next: { tags: ["recipes"] } });
+    // ...
+  }
+
+  async function fetchRecipe(recipeId: string) {
+    fetch("...", { next: { tags: [`recipes/${recipeId}`] } });
+    // ...
+  }
+  ```
+
+---
+
+### Server Actions und Transitions
+
+- Server Actions können mit einer Transition umschlossen werden
+- Dann kannst Du prüfen, ob die Action noch läuft und ggf. einen Hinweis rendern
+- ```tsx
+  export function LikesWidget() {
+    const [likes, setLikes] = useState(recipe.likes);
+    const [isPending, startTransition] = useTransition();
+
+    const onSaveClick = () => {
+       startTransition( async () => {
+         const newLikes = await addLike(recipe.id);
+         setLikes(newLikes);
+       })
+     };
+
+     return isPending ? <div>Like is updating!<div> : <div onClick={handleLikeClick}>{recipe.likes}</div>;
+  }
+  ```
 
 ---
 
@@ -929,19 +1145,20 @@ Schöne neue Welt? 🤔
 
 ## https://twitter.com/AdamRackis/status/1717607565260124613
 
+---
+
 ### Übung: Server Actions
 
-- Vervollständige die PostEditor-Komponente!
-- Füge eine neue Route (`/add`) hinzu. In der zugehörigen Komponente (`page.tsx`) gibst du einfach die (fast fertige) `PostEditor`-Komponente zurück
-- In der Blog List musst Du einen `Link` auf `/add` hinzufügen, dass man den PostEditor über die Oberfläche öffnen kann.
-- In der `PostEditor`-Komponente musst du das Speichern implementieren, wenn auf den `Save`-Button gedrückt wird
-- Zum speichern muss deine Server Action aufgerufen werden. Nach dem Aufruf der Server Actions kannst Du mit `router.push("/blog")` zur Übersichtsseite wechseln. Dein neuer Post sollte hier angezeigt werden.
-  - Den `router` bekommst Du mit dem `useRouter`-Hook von Next.js
-- In der Datei `server-actions.ts` musst Du die zugehörige Server Action-Funktion implementieren:
-  - Diese muss `title` und `body` aus dem Formular entgegen nehmen
-  - Den Post kannst Du in der Server Action mit der fertigen Funktion `savePostToBackend` speichern
-  - Wenn die Daten gespeichert wurden, musst Du Next.js anweisen, den Cache neu zu machen. Dazu verwende bitte: `revalidateTag("teaser")` in der Server Action
-- ***
+- **Baue eine Server Action zum "liken" eines Rezeptes**
+- Implementiere die Logik zum Hochzählen in der Server Action Funktion `increaseLikes` in `recipe-actions.ts`
+  - Die Funktion zum Speichern der Likes (`saveLike`) ist bereits fertig. Du übergibst dieser Funktion nur die Rezept-Id (`recipeId`), die Likes werden dann Backend-seitig hochgezählt
+  - Weitere Todos findest Du in `recipe-actions.ts`
+- Ergänze dann die Komponente in `LikesWidget.tsx`. Hier musst Du nun deinen neue Server-Action-Funktion aufrufen.
+  - Auch in dieser Datei findest du Todos
+- Fertige Lösung in: `schritte/60_actions`
+- **Optional**: Kannst Du die Ausführung der Server Action mit einer Transition ummanteln?
+
+---
 
 ## Formulare
 
@@ -953,6 +1170,7 @@ Schöne neue Welt? 🤔
 
 ### Formulare
 
+- <!-- .element: class="demo" -->Feedback Form
 - Um Formulare ohne JavaScript absenden zu können, muss es genauso aussehen, als wenn man ein Formular in einer statischen HTML-Seite beschreibt:
   - dazu muss ein HTML `form`-Element mit einem `action`-Attribute verwendet werden
   - Damit das Formular abgesendet werden kann, muss es einen `submit`-Button geben
@@ -960,8 +1178,9 @@ Schöne neue Welt? 🤔
 - Der Payload ist ein `FormData`-Objekt
 - Mit Next.js (bzw. React) können wir als `action` eine Server-Action-Funktion angeben
 - Die angegebene Server Action muss als Parameter ein `FormData`-Objekt entgegennehmen
+-
 - ```tsx
-  export function PostEditor() {
+  export function FeedbackForm() {
     async function saveForm(data: FormData) {
       "use server";
       // AUF DEM SERVER: Formular speichern
@@ -977,13 +1196,3 @@ Schöne neue Welt? 🤔
     );
   }
   ```
-
----
-
-### Formulare: Hooks
-
-- Zur Arbeit mit Formularen, die mittels progressive enhancement umgesetzt werden sollen, gibt es auch noch eine Reihe neuer Hooks, die dafür sorgen, dass das Formular (eingeschränkt) ohne JavaScript funktioniert.
-- Ist JavaScript aktiv und der Code geladen, werden dann weitere Features angeboten
-- [useFormState](https://react.dev/reference/react-dom/hooks/useFormState): Hält die Daten eines Formulars (ähnlich wie lokaler State), funktioniert aber ohne JavaScript
-- [useFormStatus](https://react.dev/reference/react-dom/hooks/useFormStatus): Liefert einen Status zurück, ob ein Formular gerade submitted wird (z.B. um den Speichern-Button zu disablen, während das Speichern läuft)
-- [useOptimistic](https://react.dev/reference/react/useOptimistic): Eine Art lokaler State, dem man vorrübergehend einen "angenommenen" Wert übergeben kann, solange ein asynchrone Operation läuft. Man kann damit schon das (erwartet) Ergebnis der asynchronen Operation "simulieren", um dem Benutzer schneller Feedback zu geben.

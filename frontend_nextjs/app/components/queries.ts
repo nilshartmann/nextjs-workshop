@@ -5,6 +5,7 @@ import {
 } from "@/app/components/api-types.ts";
 import {
   fetchFromApi,
+  fetchNullableFromApi,
   getEndpointConfig,
 } from "@/app/components/fetch-from-api.ts";
 import {
@@ -16,7 +17,7 @@ import {
 } from "@/app/demo-config.tsx";
 
 export function fetchRecipes(
-  page: number,
+  page: number = 0,
   orderBy?: "time" | "likes",
   ids?: string[],
 ): Promise<PageResponseRecipeDto> {
@@ -41,7 +42,7 @@ export function fetchRecipes(
 }
 
 export function fetchRecipe(recipeId: string) {
-  return fetchFromApi(
+  return fetchNullableFromApi(
     getEndpointConfig("get", "/api/recipes/{recipeId}"),
     {
       path: {
