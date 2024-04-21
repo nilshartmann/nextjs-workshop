@@ -93,6 +93,11 @@ code span.line-number {
   width: 100%;
 }
 
+.reveal section.small li {
+  font-size: 90%;
+  margin-bottom: 10px;
+}
+
 .reveal li {
   margin-bottom: 10px;
 }

@@ -1,154 +1,36 @@
-## Fullstack React mit
-
-# Next.js
-
----
-
 ## März 2023...
 
-<img src="slides/images/go-with-fullstack-framework.png">
-
----
-
-## Demo-Anwendung
-
----
-
-## Was macht unsere Beispiel-Anwendung aus?
-
-- Viel statischer Content
-- Viel JavaScript
-- ...gleichzeitig wenig Interaktion
-
----
-
-## Anforderung
-
-- Die Seiten sollen möglichst schnell für den Benutzer **sichtbar** und **bedienbar** sein
-
----
-
-## Mögliche Probleme
-
-- Viel JavaScript-Code, der...
-  - ...vom Browser geladen werden muss
-  - ...interpretiert und ausgeführt werden muss
-  - ...mit jeder Komponente mehr wird
-
----
-
-## Serverseitiges Rendern (SSR)
-
-### Der Klassiker
-
-1. Bei SSR wird die Anwendung auf dem Server ausgeführt
-
-2. Der Server schickt **fertiges HTML** zum Client
-
-   - Gut: Client braucht HTML nur anzuzeigen (schnell!)
-   - Gut: Kein JavaScript für die Darstellung notwendig
-
-3. Ebenfalls wird der **komplette Anwendungscode** zum Client geschickt
-   - 😢 Auch für statische Komponenten
-   - 😢 Bandbreite! Performance!
-
-- 👉 SSR löst Probleme... aber nicht alle
-
----
-
-## "Fullstack Architektur-Vision"
-
-- [https://react.dev/learn/start-a-new-react-project#which-features-make-up-the-react-teams-full-stack-architecture-vision](https://react.dev/learn/start-a-new-react-project#which-features-make-up-the-react-teams-full-stack-architecture-vision)
-
----
-
-## "Fullstack Architektur-Vision"
-
-### <!-- .element: class="fragment" data-fragment-index="0" -->React Server Components (RSC)
-
-- <!-- .element: class="fragment" data-fragment-index="1" -->Komponenten, die auf dem Server, Client und im Build gerendert werden können
-- <!-- .element: class="fragment" data-fragment-index="2" -->Data Fetching "integriert"
-
-### <!-- .element: class="fragment" data-fragment-index="3" --> Suspense
-
-- Platzhalter für "langsame" Teile einer Seite
-- Mit Streaming können diese Teile einer Seite "nachgeliefert" werden, sobald sie gerendert sind
+## <img src="slides/images/go-with-fullstack-framework.png">
 
 ---
 
 ## React empfiehlt "Fullstack-Framework"
 
-- Server Components erfordern Rendern auf dem Server oder im Build
-- Dazu braucht man ein "**Fullstack-Framework**"
-- "Framework" ist verharmlosend, weil es sich in der Regel um einen kompletten Stack samt Build-Tools und Laufzeitumgebung handelt
-- Deswegen werden solche Frameworks auch als "**Meta-Frameworks**" bezeichnet (=> Sammlung von Frameworks)
+<img src="slides/images/can-i-use-react-without-a-framework.png" style="height:900px">
+
+(https://react.dev/learn/start-a-new-react-project#can-i-use-react-without-a-framework)
 
 ---
 
 ### React empfiehlt "Fullstack-Framework"
 
+- "Framework" ist verharmlosend, weil es sich in der Regel um einen kompletten Stack samt Build-Tools und Laufzeitumgebung handelt
+- Deswegen werden solche Frameworks auch als "**Meta-Frameworks**" bezeichnet (=> Sammlung von Frameworks)
 - [Next.js](https://nextjs.org/) entspricht den Vorstellungen des React-Teams
 - [Remix](https://remix.run/) (vom React Router Team) unterstützt noch keine RSC, hat aber ähnliche Features
   - Unterstützung für RSC in Planung
 
 ---
 
-## Zero-Bundle-Size
+## Next.js
 
-# React Server Components
-
----
-
-### React Server Components
-
-- **Idee:** Komponenten werden **nicht** im **Client** ausgeführt
-  - Sie stehen auf dem Client nur **fertig gerendert** zur Verfügung
-  - Der Server schickt lediglich _eine Repräsentation der UI_, aber _keinen JavaScript-Code_
-  - Das Format ist (im Gegensatz zu SSR) **nicht HTML**
-  - Kann aber mit SSR kombiniert werden
-  - React bzw. JavaScript muss also im Client laufen
-
----
-
-### Arten von Komponenten
-
-- **Client-Komponenten** (wie bisher)
-
-  - Werden auf dem **Client** gerendert
-  - oder auf dem **Server** 🙄
-
-  - Wie bisher:
-    - JavaScript-Code wird vollständig zum Client gesendet
-    - Der JavaScript-Code wird auf dem Client ausgeführt
-    - Die Komponenten können interaktiv sein
-      - Event-Listener etc.
-
----
-
-### Arten von Komponenten
-
-- **Neu: Server-Komponenten**
-
-  - werden auf dem **Server** gerendert
-  - oder im **Build** 🙄
-
-  - liefern UI (!) zum React-Client zurück (kein JavaScript-Code)
-  - Werden im Client nicht "ausgeführt"
-  - ...und können folglich nicht interaktiv sein (nur ohne JS)
-
----
-
-### Arten von Komponenten
-
-- Die Komponenten gemischt werden:
-  - Server-Komponenten können Client-Komponenten einbinden
-    - (umgekehrt geht es nicht)
-  - Dann wird alles bis zur ersten Client-Komponente gerendert an den Client gesendet
-    - (Mit SSR auch die Client-Komponenten)
-
----
-
-# RSC am Beispiel Next.js
+- https://nextjs.org/
+- Features:
+  - Unterstützung für React Server Components
+  - SSR
+  - Static Rendering
+  - Datei-basiertes Routing
+  - Caching und Preloading
 
 ---
 
@@ -192,13 +74,13 @@
 
 - Jede Route kann eine Layout-Komponente haben
 - Dieser Komponente wird die darzustellende Seite als `children`-Property übergeben
-- - ```tsx
-    type MainLayoutProps = { children: React.ReactNode };
+- ```tsx
+  type MainLayoutProps = { children: React.ReactNode };
 
-    export default function MainLayout({ children }: MainLayoutProps) {
-      return <main>{children}</main>;
-    }
-    ```
+  export default function MainLayout({ children }: MainLayoutProps) {
+    return <main>{children}</main>;
+  }
+  ```
 
 - Layout-Komponenten können verschachtelt sein
 - Wenn eine Route keine Layout-Komponente hat, wird im Baum oberhalb nach der nächstgelegenen Layout-Komponente gesucht
@@ -225,9 +107,12 @@
     - (hat bei mir beim letzten Versuch nur eingeschränkt funktioniert)
 - Verwendung ähnlich wie auch vom React Router (und `a`-Element) gewohnt:
 
-* ```tsx
+- ```tsx
   import Link from "next/link";
-  <Link href="/">Home</Link>;
+
+  function RecipeLink( { recipeId } ) {
+  return <Link href={`${/recipes/${receipeId}`}>Show recipe</Link>;
+  }
   ```
 
 ---
@@ -235,49 +120,177 @@
 ### Übung: Vorbereitung #1
 
 - **Klonen des Repositories**
-  - Bitte klonen: https://github.com/nilshartmann/nextjs-workshop
-  - In der [README.md-Datei](https://github.com/nilshartmann/nextjs-workshop/blob/main/README.md) findet ihr Hinweise zur Installation des Workspaces
+- Bitte klonen: https://github.com/nilshartmann/nextjs-workshop
+- In der [README.md-Datei](https://github.com/nilshartmann/nextjs-workshop/blob/main/README.md) findet ihr Hinweise zur Installation des Workspaces
 - **Arbeitsverzeichnis**: Wir arbeiten ausschliesslich im Verzeichnis `workspace`
-  - ⚠️ Am besten nur das `workspace`-Verzeichnis in der IDE oder im Editor öffnen
+- ⚠️ Am besten nur das `workspace`-Verzeichnis in der IDE oder im Editor öffnen
 
 ---
 
 ### Warnung: Next.js Caching
 
 - Achtung! Next.js hat sehr aggressives Caching eingebaut
-  - Wenn ihr "komisches" Verhalten feststellt, könnt ihr probieren:
-    - Im Browser neuen Tab öffnen, oder in den Dev Tools Caching ausschalten oder Inkognito Modus verwenden
-    - "Hard Refresh" im Browser machen
-    - Verzeichnis `workspace/.next` löschen und Next.js neu starten
+- Wenn ihr "komisches" Verhalten feststellt, könnt ihr probieren:
+  - Im Browser neuen Tab öffnen, oder in den Dev Tools Caching ausschalten oder Inkognito Modus verwenden
+  - "Hard Refresh" im Browser machen
+  - Verzeichnis `workspace/.next` löschen und Next.js neu starten
 
 ---
 
 ### Übung: Getting started!
 
-- Baue die "Landing Page" für die Root-Route (`/`) im `app`-Verzeichnis
-- Die Seite muss nicht hübsch sein
-  - heute gilt: wir machen Bauhaus-Style, "form follows function" 😉
-  - unter `app/components` findest Du aber ein paar Basis-Komponenten (Button, Überschriften etc.), die Du benutzen kannst, wenn Du möchtest
-  - und wenn Du willst, kannst Du Tailwind für Styling verwenden
-- Die Komponente soll einen Link auf `/recipes` rendern
-  - Verwende dazu die `Link`-Komponente des Next.js Routers
-  - Achtung! Ein `Link` hat keine Styles, sieht dewegen wie Text aus! Du kannst einen `Link` aber zum Beispiel der `Button`-Komponente übergeben
-- Lege die Komponente für die Route `/recipes` an
-  - Es reicht, wenn diese Komponente erstmal nur "Hello World" ausgibt.
-  - In welches Verzeichnis muss die `page.tsx`-Datei für diese Route?
-- Wenn deine neuen Routen funktionieren:
-  - Füge ein `console.log`-Statement in deine Komponenten hinzu, das beim Rendern die aktuelle Uhrzeit ausgibt
-  - wo und wann wird das Log-Statement ausgegeben?
-- **Optional**: Kannst Du eine `layout`-Komponente bauen, die für Routen innerhalb `/recipes` gilt, aber nicht für die Root-Route (`/`)
-  - Du kannst dir selbst ein einfaches Layout ausdenken, oder diese Komponente verwenden: `RecipesPageLayout`
+<!-- .slide: class="small" -->
+
+1. Baue die "Landing Page" für die Root-Route (`/`) im `app`-Verzeichnis
+
+   - Die Seite muss nicht hübsch sein
+   - heute gilt: wir machen Bauhaus-Style, "form follows function" 😉
+   - unter `app/components` findest Du aber ein paar Basis-Komponenten (Button, Überschriften etc.), die Du benutzen kannst, wenn Du möchtest
+   - Die Komponente soll einen Link auf `/recipes` rendern
+
+2. Lege die Komponente für die Route `/recipes` an
+   - Es reicht, wenn diese Komponente erstmal nur "Hello World" ausgibt.
+   - In welches Verzeichnis muss die `page.tsx`-Datei für diese Route?
+3. Wenn deine neuen Routen funktionieren:
+
+   - Füge ein `console.log`-Statement in deine Komponenten hinzu, das beim Rendern die aktuelle Uhrzeit ausgibt
+   - wo und wann wird das Log-Statement ausgegeben?
+
+4. **Optional**: Kannst Du eine `layout`-Komponente bauen, die für Routen innerhalb `/recipes` gilt, aber nicht für die Root-Route (`/`)
+   - Du kannst dir selbst ein einfaches Layout ausdenken, oder diese Komponente verwenden: `RecipesPageLayout`
+
 - Mögliche Lösung findest Du in `schritte/10_routen_und_links`
+
+---
+
+# Recipify
+
+## Was macht die Beispiel-Anwendung aus?
+
+- Viel statischer Content
+- Viel JavaScript
+- ...gleichzeitig wenig Interaktion
+
+---
+
+## Anforderung
+
+- Die Seiten sollen möglichst schnell für den Benutzer **sichtbar** und **bedienbar** sein
+
+---
+
+## Mögliche Probleme
+
+- Viel JavaScript-Code, der...
+  - ...vom Browser geladen werden muss
+  - ...interpretiert und ausgeführt werden muss
+  - ...mit jeder Komponente mehr wird
+
+---
+
+## Serverseitiges Rendern (SSR)
+
+### Der Klassiker
+
+1. Bei SSR wird die Anwendung auf dem Server ausgeführt
+
+2. Der Server schickt **fertiges HTML** zum Client
+
+- Gut: Client braucht HTML nur anzuzeigen (schnell!)
+- Gut: Kein JavaScript für die Darstellung notwendig
+
+3. Ebenfalls wird der **komplette Anwendungscode** zum Client geschickt
+
+- 😢 Auch für statische Komponenten
+- 😢 Bandbreite! Performance!
+
+- 👉 SSR löst Probleme... aber nicht alle
+
+---
+
+## "Fullstack Architektur-Vision"
+
+- [https://react.dev/learn/start-a-new-react-project#which-features-make-up-the-react-teams-full-stack-architecture-vision](https://react.dev/learn/start-a-new-react-project#which-features-make-up-the-react-teams-full-stack-architecture-vision)
+
+---
+
+## "Fullstack Architektur-Vision"
+
+### <!-- .element: class="fragment" data-fragment-index="0" -->React Server Components (RSC)
+
+- <!-- .element: class="fragment" data-fragment-index="1" -->Komponenten, die auf dem Server, Client und im Build gerendert werden können
+- <!-- .element: class="fragment" data-fragment-index="2" -->Data Fetching "integriert"
+
+### <!-- .element: class="fragment" data-fragment-index="3" --> Suspense
+
+- Platzhalter für "langsame" Teile einer Seite
+- Mit Streaming können diese Teile einer Seite "nachgeliefert" werden, sobald sie gerendert sind
+
+---
+
+## Zero-Bundle-Size
+
+# React Server Components
+
+---
+
+### React Server Components
+
+- **Idee:** Komponenten werden **nicht** im **Client** ausgeführt
+- Sie stehen auf dem Client nur **fertig gerendert** zur Verfügung
+- Der Server schickt lediglich _eine Repräsentation der UI_, aber _keinen JavaScript-Code_
+- Das Format ist (im Gegensatz zu SSR) **nicht HTML**
+- Kann aber mit SSR kombiniert werden
+- React bzw. JavaScript muss also im Client laufen
+
+---
+
+### Arten von Komponenten
+
+- **Client-Komponenten** (wie bisher)
+
+- Werden auf dem **Client** gerendert
+- oder auf dem **Server** 🙄
+
+- Wie bisher:
+  - JavaScript-Code wird vollständig zum Client gesendet
+  - Der JavaScript-Code wird auf dem Client ausgeführt
+  - Die Komponenten können interaktiv sein
+    - Event-Listener etc.
+
+---
+
+### Arten von Komponenten
+
+- **Neu: Server-Komponenten**
+
+- werden auf dem **Server** gerendert
+- oder im **Build** 🙄
+
+- liefern UI (!) zum React-Client zurück (kein JavaScript-Code)
+- Werden im Client nicht "ausgeführt"
+- ...und können folglich nicht interaktiv sein (nur ohne JS)
+
+---
+
+### Arten von Komponenten
+
+- Die Komponenten gemischt werden:
+- Server-Komponenten können Client-Komponenten einbinden
+  - (umgekehrt geht es nicht)
+- Dann wird alles bis zur ersten Client-Komponente gerendert an den Client gesendet
+  - (Mit SSR auch die Client-Komponenten)
+
+---
+
+# RSC am Beispiel Next.js
 
 ---
 
 ### Demo: Eine React Server Komponente
 
 - **Alle** Komponenten in Next.js sind per Default **Server Components**
-  - Ausnahmen (Client Komponenten) müssen explizit gekennzeichnet werden (dazu später mehr)
+- Ausnahmen (Client Komponenten) müssen explizit gekennzeichnet werden (dazu später mehr)
 - <!-- .element: class="demo" --> Landing-Page `/page.tsx`
 - <!-- .element: class="demo" -->`/layout.tsx`
 - <!-- .element: class="demo" -->`console.log` in `page`-Komponente
@@ -293,7 +306,7 @@
 - Komponente, die Daten benötigen, können diese direkt _in der Komponente_ laden
 - _Kann_ Latenz sparen und bessere Performance bringen
 
-  - "No Client-Server Waterfalls"
+- "No Client-Server Waterfalls"
 
 - Server Components können die Server-Infrastruktur nutzen (DB, Filesystem)
 
@@ -301,13 +314,11 @@
 
 ---
 
-## DataFetching
+## Data Fetching
 
 ### Demo: Eine asynchrone Server-Komponente
 
-- Das ist ein React-Feature!
-
-  - Next.js-spezifisch nur die `page`-Konvention
+- React Server Componentens können asynchron sein!
 
 - <!-- .element: class="demo" -->recipes/page.tsx anlegen
 
@@ -316,22 +327,23 @@
 
 ---
 
-### React Server Components können asynchron sein
+### Asynchrone React Server Components
 
 - React Server Components (RSC) werden **nicht auf dem Client** ausgeführt!
-  - Ihr könnt dort keine Event Handler etc. verwenden. Auch Hooks (z.B. `useState`) gehen nicht.
+- Ihr könnt dort keine Event Handler etc. verwenden. Auch Hooks (z.B. `useState`) gehen nicht.
 - Dafür könnt ihr eine RSC als `async function` implementieren
 - Innerhalb der RSC könnt ihr dann mit Promises arbeiten und mit `await` auf diese warten
 - Ihr könnt z.B. `fetch`-Aufrufe machen, Datenbank-Zugriffe oder die Node.JS API verwenden, um Dateien von der Festplatte zu lesen
-  - ```tsx
-    export default async function RecipeList() {
-      // Dieser Fetch-Call wird im Next.js-Backend (!) ausgeführt!
-      const response = await fetch("http://localhost:8100/api/recipes");
-      const recipes = await response.json();
-      //
-      return <RecipeList recipes={recipes} />;
-    }
-    ```
+- ```tsx
+  export default async function RecipeList() {
+    // Dieser Fetch-Call wird im Next.js-Backend (!) ausgeführt!
+    const response = await fetch("http://localhost:8100/api/recipes");
+    const recipes = await response.json();
+
+    // ...
+    return <RecipeList recipes={recipes} />;
+  }
+  ```
 
 ---
 
@@ -346,24 +358,26 @@
 
 - Während eine Route gerendert wird, kann Next.js eine Fallback- bzw. Platzhalter-Komponente anzeigen
 - Diese wird solange dargestellt, bis alle Promises in der Routen-Komponente aufgelöst werden konnten
-  - Die Platzhalter-Komponente wird an derselben Stelle im Layout dargestellt, wie auch die Routen-Komponente
-  - Wenn die Routen-Komponente fertig gerendert wurde, wird nur der Bereich ausgetauscht
+- Die Platzhalter-Komponente wird an derselben Stelle im Layout dargestellt, wie auch die Routen-Komponente
+- Wenn die Routen-Komponente fertig gerendert wurde, wird nur der Bereich ausgetauscht
 - Die Datei für eine Platzhalter-Komponente muss `loading.tsx` heißen und per `export default` eine Komponenten-Funktion exportieren
 - Was du in dieser Komponente machst, bleibt dir überlassen
 - `loading.tsx`-Dateien in tieferen Verzeichnissen überschreiben dabei `loading.tsx`-Dateien in höheren Verzeichnissen
   - oder umgekehrt: wenn in dem angeforderten Routen-Verzeichniskeine `loading.tsx`-Datei vorhanden ist, schaut Next.js in den höherliegenden Verzeichnissen
-  - wird keine `loading.tsx`-Datei gefunden, bleibt die Seite weiß...
+- wird keine `loading.tsx`-Datei gefunden, bleibt die Seite weiß...
 - ```tsx
-    // recipes/loading.tsx
-    export default Loading() {
-      return <div className={"LoadingSpinner"}>Please Wait...</div>
-    }
+  // recipes/loading.tsx
+  export default Loading() {
+    return <div className={"LoadingSpinner"}>Please Wait...</div>
+  }
   ```
 
 ---
 
 ### Caching
 
+- **Caching** ist Next.js-spezifisch.
+  - React macht keine Aussage, ob und wie Server Components oder Datenverkehr allgemein gecached werden soll.
 - Eine einmal gerenderte Route wird von Next.js gecached.
 - Das passiert im Browser und im Backend selbst
   - Wo und wie lange, hängt von einer ganzen Reihe von Faktoren ab
@@ -1196,3 +1210,11 @@ Schöne neue Welt? 🤔
     );
   }
   ```
+
+```
+
+```
+
+```
+
+```
