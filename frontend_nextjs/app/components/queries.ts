@@ -14,6 +14,7 @@ import {
   slowDown_GetFeedbacks,
   slowDown_GetRecipe,
   slowDown_GetRecipeList,
+  slowDown_IncreaseLikes,
 } from "@/app/demo-config.tsx";
 
 export function fetchRecipes(
@@ -80,6 +81,20 @@ export function saveFeedback(recipeId: string, newFeedback: NewFeedback) {
       body: { feedbackData: newFeedback },
       query: {
         slowdown: slowDown_AddFeedback,
+      },
+    },
+  );
+}
+
+export function saveLikeToDb(recipeId: string) {
+  return fetchFromApi(
+    getEndpointConfig("patch", "/api/recipes/{recipeId}/likes"),
+    {
+      path: {
+        recipeId,
+      },
+      query: {
+        slowdown: slowDown_IncreaseLikes,
       },
     },
   );
