@@ -38,7 +38,8 @@ public class RecipeApiController {
 
     enum ReceipeSort {
         time,
-        likes
+        likes,
+        rating
     }
 
     @GetMapping("/recipes")
@@ -61,6 +62,9 @@ public class RecipeApiController {
             sort.map(s -> {
                 if (s == ReceipeSort.time) {
                     return Sort.by("totalTime");
+                }
+                if (s == ReceipeSort.rating) {
+                    return Sort.by("averageRating").descending().and(Sort.by("title"));
                 }
                 return Sort.by("likes").descending().and(Sort.by("title"));
             }).orElse(Sort.by("createdAt").descending()));
