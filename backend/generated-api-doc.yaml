@@ -188,6 +188,7 @@ paths:
           enum:
           - time
           - likes
+          - rating
       - name: ids
         in: query
         required: false
@@ -396,9 +397,9 @@ components:
       properties:
         id:
           type: string
-        mealType:
-          type: string
         title:
+          type: string
+        mealType:
           type: string
     CategoryDto:
       required:
