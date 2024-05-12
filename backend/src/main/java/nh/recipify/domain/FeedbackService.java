@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import nh.recipify.domain.model.Feedback;
 import nh.recipify.domain.model.FeedbackRepository;
 import nh.recipify.domain.model.RecipeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class FeedbackService {
 
+    private static final Logger log = LoggerFactory.getLogger(FeedbackService.class);
     private final RecipeRepository recipeRepository;
     private final FeedbackRepository feedbackRepository;
 
@@ -43,9 +46,13 @@ public class FeedbackService {
         var recipe = recipeRepository.findById(recipeId).orElseThrow(
             () -> new EntityNotFoundException("No recipe " + recipeId + " found."));
 
+        var oldLikes = recipe.getLikes();
+
         recipe.likeRecipe();
 
         var newLikes = recipeRepository.save(recipe).getLikes();
+
+        log.info("Increased likes for reipce '{}' - old: {}, new: {}", recipeId, oldLikes, newLikes);
 
         return newLikes;
     }

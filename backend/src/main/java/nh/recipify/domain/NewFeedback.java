@@ -1,11 +1,8 @@
 package nh.recipify.domain;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
-public record NewFeedback(@NotBlank String commenter,
+public record NewFeedback(@NotBlank @Size(min = 3) String commenter,
                           @NotNull @Min(0) @Max(5) int stars,
                           @NotBlank String comment) {
 }
