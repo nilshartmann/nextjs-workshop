@@ -59,6 +59,14 @@
 
 ---
 
+### Demo: Next.js Router
+
+- <!-- .element: class="demo" --> Landing-Page
+- <!-- .element: class="demo" --> Recipes Page
+- <!-- .element: class="demo" --> Layout
+
+---
+
 ### Der Next.js Router
 
 - In einem Route-Verzeichnis kann es weitere Dateien geben, die einen festgelegten Namen haben und jeweils per `default export` eine React-Komponente zurückliefern:
