@@ -8,6 +8,9 @@ type RecipeCardProps = {
 };
 
 export default function RecipeCard({ recipe }: RecipeCardProps) {
+  // const r = cookies();
+  // console.log("r");
+
   return (
     <div
       className={

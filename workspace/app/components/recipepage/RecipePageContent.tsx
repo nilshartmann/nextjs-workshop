@@ -1,16 +1,27 @@
 import { RecipeBanner } from "./RecipeBanner.tsx";
 import { CookingTime } from "./CookingTime.tsx";
 import { Instructions } from "./Instructions.tsx";
-import { DetailedRecipeDto } from "../api-types.ts";
+import IngredientsSection from "@/app/components/recipepage/IngredientsSection.tsx";
+import { fetchRecipe } from "@/app/components/queries.ts";
 import { Sidebar } from "@/app/components/Sidebar.tsx";
 import { H2 } from "@/app/components/Heading.tsx";
-import IngredientsSection from "@/app/components/recipepage/IngredientsSection.tsx";
+import FeedbackListLoader from "@/app/components/recipepage/FeedbackListLoader.tsx";
 
 type RecipePageContentProps = {
-  recipe: DetailedRecipeDto;
+  // recipe: DetailedRecipeDto;
+  recipeId: string;
 };
 
-export default function RecipePageContent({ recipe }: RecipePageContentProps) {
+export default async function RecipePageContent({
+  recipeId,
+}: RecipePageContentProps) {
+  const result = await fetchRecipe(recipeId);
+  if (!result) {
+    return null;
+  }
+
+  const recipe = result.recipe;
+
   return (
     <div className={"mb-20"}>
       <RecipeBanner recipe={recipe} />
@@ -26,15 +37,7 @@ export default function RecipePageContent({ recipe }: RecipePageContentProps) {
         <div className={"md:w-1/3"}>
           <Sidebar>
             <H2>Feedback</H2>
-            {/*
-
-            TODO:
-
-             -> hier FeedbackList (oder FeedbackListLoader) verwenden,
-                um Bewertungen zu laden und anzuzeigen
-             --> Mit der Suspense-Komponente experimentieren!
-
-            */}
+            <FeedbackListLoader recipeId={recipe.id} />
           </Sidebar>
         </div>
       </div>

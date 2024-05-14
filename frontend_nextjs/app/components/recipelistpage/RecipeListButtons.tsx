@@ -3,7 +3,6 @@ import { Button, CheckLabel } from "@/app/components/Button.tsx";
 import Link from "next/link";
 import { MouseEventHandler, ReactNode, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import LoadingIndicator from "@/app/components/LoadingIndicator.tsx";
 import { useRecipeListSearchParams } from "@/app/components/recipelistpage/useRecipeListSearchParams.tsx";
 
 export function FilterButton() {
@@ -63,7 +62,7 @@ export function OrderButton({ orderBy, children }: OrderButtonProps) {
         {checked ? (
           children
         ) : pending ? (
-          <LoadingIndicator secondary />
+          <p className={"text-4xl font-bold text-white"}>WARTEN...</p>
         ) : (
           <Link href={href} onClick={handleClick}>
             {children}

@@ -5,7 +5,7 @@ export const recipesPerPage = 6;
 export const slowDown_GetRecipeList = 0;
 
 /** slowdown increasing likes of a recipe */
-export const slowDown_IncreaseLikes = 0;
+export const slowDown_IncreaseLikes = 3600;
 
 /** Single recipe on the /$recipeId route */
 export const slowDown_GetRecipe = 0;
