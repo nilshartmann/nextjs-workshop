@@ -10,6 +10,7 @@ import {
 } from "@/app/components/recipelistpage/RecipeListSearchParams.ts";
 import RecipeListNavBar from "@/app/components/recipelistpage/RecipeListNavBar.tsx";
 import RecipeCard from "@/app/components/recipelistpage/RecipeCard.tsx";
+import {Timer} from "@/app/components/Timer.tsx";
 
 type RecipeListPageProps = {
   searchParams: TRecipePageListParams;
@@ -28,6 +29,8 @@ export default async function RecipeListPage({
     <div className={"bg-goldgray"}>
       <div className={"container mx-auto pb-16 pt-16"}>
         <RecipeListNavBar />
+
+        <Timer />
 
         <RecipeList recipesPromise={result} />
 
