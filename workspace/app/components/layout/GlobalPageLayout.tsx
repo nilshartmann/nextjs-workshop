@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Footer from "./Footer";
-import GlobalNavBar from "./GlobalNavBar";
+import { RecipesPageLayout } from "@/app/components/material/RecipesPageLayout.tsx";
 
 type DefaultLayoutProps = {
   children: ReactNode;
@@ -15,8 +15,7 @@ export function GlobalPageLayout({ children }: DefaultLayoutProps) {
           {/*<NewsletterRegistration />*/}
         </div>
       </div>
-
-      {children}
+      <RecipesPageLayout>{children}</RecipesPageLayout>
 
       <Footer />
     </div>

@@ -12,7 +12,7 @@ type RecipePageContentProps = {
 
 export default function RecipePageContent({ recipe }: RecipePageContentProps) {
   return (
-    <div className={"mb-20"}>
+    <div>
       <RecipeBanner recipe={recipe} />
       <div className={"container mx-auto mb-8 mt-8 md:flex md:space-x-12"}>
         <div className={"md:w-2/3"}>

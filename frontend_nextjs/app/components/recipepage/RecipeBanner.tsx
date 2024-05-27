@@ -13,7 +13,7 @@ export function RecipeBanner({ recipe }: RecipeBannerProps) {
         "--recipe-bg-image": `url('/images/recipes/food_${recipe.id}.png')`,
       }}
     >
-      <div className={`recipify-header-wrap mt-16 pb-12 pe-8 ps-8 pt-12`}>
+      <div className={`recipify-header-wrap pb-12 pe-8 ps-8 pt-12`}>
         <div
           className={
             "container mx-auto flex flex-col-reverse md:flex-row md:space-x-8"
