@@ -1,6 +1,6 @@
 import ButtonBar from "../ButtonBar.tsx";
 import { NavButtonBar } from "../NavButtonBar.tsx";
-import { OrderButton } from "@/app/components/recipelistpage/RecipeListButtons.tsx";
+import { OrderButton } from "@/app/components/recipelistpage/OrderButton.tsx";
 
 export default function RecipeListNavBar() {
   return (
