@@ -16,6 +16,8 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
     >
       <div className={"flex flex-col justify-between"}>
         <div>
+          {/*<Timer />*/}
+
           <Link prefetch={false} href={`/recipes/${recipe.id}`}>
             <div className={"overflow-hidden"}>
               <img

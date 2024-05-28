@@ -1,4 +1,14 @@
-export function increaseLikes(recipeId: string) {
+"use server";
+
+import { saveLike } from "@/app/components/queries.ts";
+
+export async function increaseLikes(recipeId: string) {
+  console.log("increaseLikes", recipeId);
+
+  const response = await saveLike(recipeId);
+
+  return response;
+
   // TODO:
   //
   // Implementiere die increaseLikes Server-Action-Funktion

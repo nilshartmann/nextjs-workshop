@@ -5,6 +5,9 @@ import { DetailedRecipeDto } from "../api-types.ts";
 import { Sidebar } from "@/app/components/Sidebar.tsx";
 import { H2 } from "@/app/components/Heading.tsx";
 import IngredientsSection from "@/app/components/recipepage/IngredientsSection.tsx";
+import FeedbackListLoader from "@/app/components/recipepage/FeedbackListLoader.tsx";
+import { Suspense } from "react";
+import LoadingIndicator from "@/app/components/LoadingIndicator.tsx";
 
 type RecipePageContentProps = {
   recipe: DetailedRecipeDto;
@@ -35,6 +38,10 @@ export default function RecipePageContent({ recipe }: RecipePageContentProps) {
              --> Mit der Suspense-Komponente experimentieren!
 
             */}
+
+            <Suspense fallback={<LoadingIndicator />}>
+              <FeedbackListLoader recipeId={recipe.id} />
+            </Suspense>
           </Sidebar>
         </div>
       </div>

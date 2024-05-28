@@ -2,6 +2,7 @@ import { RecipeDto } from "../api-types.ts";
 import { H1 } from "../Heading.tsx";
 import Link from "next/link";
 import { RecipeCategories } from "@/app/components/RecipeCategories.tsx";
+import { Timer } from "@/app/components/Timer.tsx";
 
 type RecipeCardProps = {
   recipe: RecipeDto;
@@ -16,6 +17,7 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
     >
       <div className={"flex flex-col justify-between"}>
         <div>
+          <Timer />
           <Link prefetch={false} href={`/recipes/${recipe.id}`}>
             <div className={"overflow-hidden"}>
               <img
