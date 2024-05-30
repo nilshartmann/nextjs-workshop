@@ -1,12 +1,25 @@
 # Workshop: Fullstack Anwendungen mit React und Next.js
 
-Dieses Repository (https://github.com/nilshartmann/nextjs-workshop) enthält den Source-Code für die Beispiel-Anwendung sowie den Workspace für unsere Übungen.
+Dieses Repository (https://github.com/nilshartmann/nextjs-workshop) enthält den Source-Code für die Beispiel-Anwendung sowie den Workspace für unsere Übungen. Bitte klone dir das Repository lokal auf deinen Computer.
 
 Im folgenden findest Du beschrieben, wie du den Workspace einrichtest und die Anwendung für die Übung startest.
 
 ![Screenshot of example application](screenshot.png)
 
 ## Voraussetzungen
+
+> Um sicherzustellen, dass der Workspace bei dir funktioniert, möchte ich dich bitten, schon im Vorfeld die hier beschriebene Installation durchzuführen.
+>
+> Bitte stelle aber trotzdem sicher, dass dein Computer auch während des Workshops Zugriff auf das Internet hat, um insbesondere von GitHub Repositories zu klonen bzw. updates zu machen (Git pull) und um npm Pakete installieren zu können. (Hindernisse können hier zum Beispiel VPNs, Firewalls, Firmen-Proxy oder -Sicherheitsrichtlinien sein)
+
+Auf deinem Computer benötigst Du folgende Software:
+
+- Node.js (mind. Version 18)
+- Einen Node Package Manager, am besten pnpm
+- Docker bzw. docker-compose (Ausnahmen siehe unten)
+- Eine Entwicklungsumgebung, mit der du JavaScript bzw. TypeScript entwickeln kannst (z.B. Visual Studio Code, WebStorm oder IntelliJ).
+
+### Aufbau der Anwendung
 
 Die Anwendung besteht aus zwei Teilen, die beide das Backend darstellen:
 
@@ -92,7 +105,7 @@ Diese Klasse sorgt auch automatisch dafür, dass ein Docker-Container mit einer 
 
 - Wenn Du IntelliJ verwendest, kannst Du die Run Configuration `01 - Run BackendApplication (with DB)` zum Starten verwenden.
 
-> Falls Spring Boot das docker-compose-File nicht findet, mit der die Datenbank gestartet wird, und du eine entsprechende Fehlermeldung im Log siehst, musst Du die Datei `backend/src/main/resources/application.properties` anpassen. Darin gibt es eine Property `spring.docker.compose.file`, die auf die Datei `docker-compose-backend.yaml` im Root-Verzeichnis des Repositories zeigen muss. Du kannst hier einfach den vollqualifizierten Pfad eintragen, in dem bei dir die `docker-compose-backend.yaml`-liegt.
+> Falls Spring Boot das docker-compose-File nicht findet, mit dem die Datenbank gestartet wird, und du eine entsprechende Fehlermeldung im Log siehst, musst Du die Datei `backend/src/main/resources/application.properties` anpassen. Darin gibt es eine Property `spring.docker.compose.file`, die auf die Datei `docker-compose-backend.yaml` im Root-Verzeichnis des Repositories zeigen muss. Du kannst hier einfach den vollqualifizierten Pfad eintragen, in dem bei dir die `docker-compose-backend.yaml`-liegt.
 
 Wenn das Backend gestartet ist, kannst Du einmal `localhost:8080/api/recipes` im Browser öffnen. Dort sollte eine JSON-Liste mit Rezepten zurückgeliefert werden.
 
@@ -109,7 +122,7 @@ Um den kompletten Workspace in GitPod zu starten, gibt es zwei Möglichkeiten.
 Die Next.js-Anwendung existiert zweimal:
 
 1. Eine "Workspace-Version" (Verzeichnis: `workspace`). **Hier werden wir während des Workshops arbeiten und die Übungen machen**.
-2. Eine "fertige" Version (Verzeichnis `frontend_nextjs`), die Du dir bei Interesse ansehen kannst. Diese Version ist weitgehend identisch mit der fertigen "Workspace-Version", enthält aber noch ein paar Features, die über unseren Workshop hinausgehen. Wenn Du diesen Stand zum ausprobieren starten möchtest, sind dieselben Schritte wie für die "Workspace-Version" erforderlich. Du führst die Schritte dann aber im Verzeichnis `frontend_nextjs` aus. Möglicherweise kannst Du nicht beide Versionen gleichzeitig starten, da es zu Port Kollisionen kommen kann. (Beide laufen auf Port 8100).
+2. Eine "fertige" Version (Verzeichnis `frontend_nextjs`), die Du dir bei Interesse ansehen kannst. Diese Version ist weitgehend identisch mit der fertigen "Workspace-Version", enthält aber noch ein paar Features, die über unseren Workshop hinausgehen. Wenn Du diesen Stand zum ausprobieren starten möchtest, sind dieselben Schritte wie für die "Workspace-Version" erforderlich. Du führst die Schritte dann aber im Verzeichnis `frontend_nextjs` aus.
 
 ### (Optional) Schritt 1: Installation von pnpm
 
