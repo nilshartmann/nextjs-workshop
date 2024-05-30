@@ -37,7 +37,7 @@ Ich werde das Backend während des Workshops auch in der Cloud starten. Du kanns
 
 **Variante 3**: Starten des Java-Prozesses aus deiner IDE bzw. über die Kommandozeile.
 
-Dieses ist der aufwändigste Weg und macht aus meiner Sicht nur Sinn, wenn Du selber auch Java entwickelst und dir die Implementierung ansehen oder verändern möchtest. Du brauchst dann ein JDK 21 und Docker auf deinem Laptop. Dein Laptop muss in der Lage sein über Gradle und Docker Pakete bzw. Images zu installieren.
+Dieses ist der aufwändigste Weg und macht aus meiner Sicht nur Sinn, wenn Du selber auch Java entwickelst und dir die Implementierung ansehen oder verändern möchtest. Du brauchst dann ein JDK 21 und Docker auf deinem Laptop. Dein Laptop muss in der Lage sein, über Gradle und Docker Pakete bzw. Images zu installieren.
 
 In dieser Variante müssen die Ports `8080` und `8432` verfügbar sein.
 
@@ -90,6 +90,10 @@ Das Java-Projekt wird mit Gradle gebaut. Wenn Du das Projekt in deiner IDE öffn
 
 Diese Klasse sorgt auch automatisch dafür, dass ein Docker-Container mit einer Postgres Datenbank gestartet wird. Voraussetzung dafür ist, dass Du docker-compose auf einem Computer installiert hast.
 
+- Wenn Du IntelliJ verwendest, kannst Du die Run Configuration `01 - Run BackendApplication (with DB)` zum Starten verwenden.
+
+> Falls Spring Boot das docker-compose-File nicht findet, mit der die Datenbank gestartet wird, und du eine entsprechende Fehlermeldung im Log siehst, musst Du die Datei `backend/src/main/resources/application.properties` anpassen. Darin gibt es eine Property `spring.docker.compose.file`, die auf die Datei `docker-compose-backend.yaml` im Root-Verzeichnis des Repositories zeigen muss. Du kannst hier einfach den vollqualifizierten Pfad eintragen, in dem bei dir die `docker-compose-backend.yaml`-liegt.
+
 Wenn das Backend gestartet ist, kannst Du einmal `localhost:8080/api/recipes` im Browser öffnen. Dort sollte eine JSON-Liste mit Rezepten zurückgeliefert werden.
 
 ### Variante 4: GitPod
@@ -137,14 +141,16 @@ Die Next.js-Anwendung kannst Du ebenfalls im `workspace`-Verzeichnis starten, in
 pnpm dev
 ```
 
-Die Anwendung startet nun und sollte nach kurzer Zeit auf http://localhost:8100 laufen.
+Die Anwendung startet nun und sollte nach kurzer Zeit auf http://localhost:8100 laufen. Wenn du diese URL in deinem Browser öffnest, müsste dort die Meldung `This page could not be found.` erscheinen, da die Routen für die Anwendung noch fehlen (diese werden wir im Workshop entwickeln).
 
-### Hinwese zum Next.js Cache
+### Hinweise zum Next.js Cache
 
 Next.js hat ein sehr aggressives Caching eingebaut. Deswegen kann es manchmal sein, dass Du Änderungen nicht sofort siehst. Deswegen hilft es manchmal:
 
 - Im Browser "hard refresh" machen (Cmd+Shift+R bzw. Ctrl+Shift+R bei Firefox z.B.). Dann verwirft Firefox Dateien im Cache.
 - Das Verzeichnis `workspace/.next` löschen und Next.js neustarten
+
+Dieses Verhalten wird sich übrigens in [Next.js 15 ändern](https://nextjs.org/blog/next-15-rc#caching-updates), denn dort ist das Caching nicht mehr an allen Stellen per Default eingeschaltet.
 
 ## Fragen, Kommentare, Feedback
 
