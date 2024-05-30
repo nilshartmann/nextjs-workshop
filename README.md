@@ -8,9 +8,10 @@ Im folgenden findest Du beschrieben, wie du den Workspace einrichtest und die An
 
 ## Voraussetzungen
 
-> Um sicherzustellen, dass der Workspace bei dir funktioniert, möchte ich dich bitten, schon im Vorfeld die hier beschriebene Installation durchzuführen.
->
-> Bitte stelle aber trotzdem sicher, dass dein Computer auch während des Workshops Zugriff auf das Internet hat, um insbesondere von GitHub Repositories zu klonen bzw. updates zu machen (Git pull) und um npm Pakete installieren zu können. (Hindernisse können hier zum Beispiel VPNs, Firewalls, Firmen-Proxy oder -Sicherheitsrichtlinien sein)
+Um sicherzustellen, dass der Workspace bei dir funktioniert, möchte ich dich bitten, schon im Vorfeld die hier beschriebene Installation durchzuführen.
+
+> [!IMPORTANT]  
+> Auch wenn du den Workspace schon vor der Schulung installierst, stelle bitte sicher, dass dein Computer auch _während_ des Workshops Zugriff auf das Internet hat. Du solltest in der Lage sein, von GitHub Repositories zu klonen bzw. updates zu machen (git pull) und npm Pakete zu installieren. (Hindernisse können hier zum Beispiel VPNs, Firewalls, Firmen-Proxy oder -Sicherheitsrichtlinien sein)
 
 Auf deinem Computer benötigst Du folgende Software:
 
@@ -105,6 +106,7 @@ Diese Klasse sorgt auch automatisch dafür, dass ein Docker-Container mit einer 
 
 - Wenn Du IntelliJ verwendest, kannst Du die Run Configuration `01 - Run BackendApplication (with DB)` zum Starten verwenden.
 
+> [!IMPORTANT]  
 > Falls Spring Boot das docker-compose-File nicht findet, mit dem die Datenbank gestartet wird, und du eine entsprechende Fehlermeldung im Log siehst, musst Du die Datei `backend/src/main/resources/application.properties` anpassen. Darin gibt es eine Property `spring.docker.compose.file`, die auf die Datei `docker-compose-backend.yaml` im Root-Verzeichnis des Repositories zeigen muss. Du kannst hier einfach den vollqualifizierten Pfad eintragen, in dem bei dir die `docker-compose-backend.yaml`-liegt.
 
 Wenn das Backend gestartet ist, kannst Du einmal `localhost:8080/api/recipes` im Browser öffnen. Dort sollte eine JSON-Liste mit Rezepten zurückgeliefert werden.
