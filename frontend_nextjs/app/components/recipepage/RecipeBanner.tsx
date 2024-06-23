@@ -1,6 +1,7 @@
 import React from "react";
 import { DetailedRecipeDto } from "../api-types.ts";
 import { RecipeCategories } from "@/app/components/RecipeCategories.tsx";
+import "./RecipeBanner.css";
 
 type RecipeBannerProps = {
   recipe: DetailedRecipeDto;
