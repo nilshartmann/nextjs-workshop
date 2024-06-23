@@ -77,7 +77,7 @@ type BookmarkIconProps = {
 };
 function BookmarkIcon({ isBookmarked, onToggleBookmark }: BookmarkIconProps) {
   return (
-    <div className={"absolute right-8 top-8 "}>
+    <div className={"absolute right-8 top-8"}>
       <div
         className={
           "flex h-9 w-9 items-center justify-center rounded-full bg-white"

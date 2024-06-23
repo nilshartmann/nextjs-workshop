@@ -11,7 +11,7 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
   return (
     <div
       className={
-        "h-full transform rounded border border-gray-200 bg-white p-4 shadow-lg transition-all duration-500 ease-in-out hover:drop-shadow-2xl "
+        "h-full transform rounded border border-gray-200 bg-white p-4 shadow-lg transition-all duration-500 ease-in-out hover:drop-shadow-2xl"
       }
     >
       <div className={"flex flex-col justify-between"}>

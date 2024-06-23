@@ -142,7 +142,7 @@ export function Timer() {
       onMouseEnter={() => handleExpand(true)}
       onMouseLeave={() => handleExpand(false)}
       className={twMerge(
-        "max-w-1/4 flex  items-center rounded bg-white pe-2 ps-2 font-barlow",
+        "max-w-1/4 flex items-center rounded bg-white pe-2 ps-2 font-barlow",
         timer?.state === "finished" && "bg-green",
       )}
     >
@@ -187,7 +187,7 @@ export function Timer() {
               <div className={"me-2 w-8 font-bold text-gray-500"}>
                 {formatMinSeconds(timer?.timeRemaining || 0)}
               </div>
-              <div className={"me-2 ms-2 "}>
+              <div className={"me-2 ms-2"}>
                 <Button disabled={!buttonEnabled}>
                   <button onClick={onCancelTimer} name={"cancelBtn"}>
                     Cancel

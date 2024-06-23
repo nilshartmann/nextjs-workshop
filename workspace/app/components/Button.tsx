@@ -16,9 +16,9 @@ export function Button({
   return (
     <span
       className={twMerge(
-        "inline-flex transform items-center justify-center rounded px-4 py-2 font-barlow font-normal text-white  transition-all duration-500 ease-in-out hover:cursor-pointer hover:underline",
+        "inline-flex transform items-center justify-center rounded px-4 py-2 font-barlow font-normal text-white transition-all duration-500 ease-in-out hover:cursor-pointer hover:underline",
         size === "lg" &&
-          "mb-2  mt-2 border-2 border-red bg-red p-4 text-2xl hover:border-red hover:bg-orange_2 hover:shadow-2xl hover:shadow-red ",
+          "mb-2 mt-2 border-2 border-red bg-red p-4 text-2xl hover:border-red hover:bg-orange_2 hover:shadow-2xl hover:shadow-red",
         size === "regular" && "mb-2 mt-2",
         size === "regular" && "bg-orange_2 p-2 hover:bg-orange_2-500",
         size === "regular" &&

@@ -11,7 +11,7 @@ export default function LandingPage() {
           "radial-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0)), url('/images/landing-page.png')",
       }}
     >
-      <div className="px-4 pt-32 text-center font-space font-bold ">
+      <div className="px-4 pt-32 text-center font-space font-bold">
         <div className="mx-auto inline-block max-w-4xl bg-white p-2 pb-4 text-8xl text-red">
           Recipify
         </div>

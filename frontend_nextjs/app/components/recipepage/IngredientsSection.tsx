@@ -24,7 +24,7 @@ export default function IngredientsSection({ ingredients }: IngredientsProps) {
             }
             onClick={() => setServings(servings + 1)}
           />
-          <span className={"text-gray-500 "}> {servings} servings </span>
+          <span className={"text-gray-500"}> {servings} servings </span>
           <i
             className={
               "fa-solid fa-circle-minus text-orange_2 hover:cursor-pointer hover:text-orange_2-500"

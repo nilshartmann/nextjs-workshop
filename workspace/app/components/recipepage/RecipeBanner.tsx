@@ -49,7 +49,7 @@ export function RecipeBanner({ recipe }: RecipeBannerProps) {
           <div className={"md:w-1/2"}>
             <div className={"overflow-hidden"}>
               <img
-                className="w-full transform rounded object-cover transition-all duration-1000 ease-in-out hover:scale-125 sm:mt-4 sm:max-h-80 md:mt-0 "
+                className="w-full transform rounded object-cover transition-all duration-1000 ease-in-out hover:scale-125 sm:mt-4 sm:max-h-80 md:mt-0"
                 src={`/images/recipes/food_${recipe.id}.png`}
                 alt={recipe.title}
               />

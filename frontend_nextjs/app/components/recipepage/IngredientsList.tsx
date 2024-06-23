@@ -21,8 +21,8 @@ export default function IngredientList({
             }
             key={i.name}
           >
-            <i className="fa-regular fa-circle-check me-2 text-orange_2 "></i>
-            <span className={"font-inter text-gray-500 "}>
+            <i className="fa-regular fa-circle-check me-2 text-orange_2"></i>
+            <span className={"font-inter text-gray-500"}>
               {(i.amount / 4) * servings} {i.unit} {i.name}
             </span>
           </div>

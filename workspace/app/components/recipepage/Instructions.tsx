@@ -16,7 +16,7 @@ export function Instructions({ recipe }: InstructionsProps) {
           <Fragment key={i.orderNo}>
             <div
               className={
-                "mt-8 items-start border-b border-dotted border-gray-300 pb-8 sm:flex "
+                "mt-8 items-start border-b border-dotted border-gray-300 pb-8 sm:flex"
               }
             >
               <div className={"font-space font-medium text-red sm:w-1/4"}>
