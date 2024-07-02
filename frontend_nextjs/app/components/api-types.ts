@@ -260,7 +260,9 @@ export const get_Recipes = {
     query: z.object({
       page: z.number().optional(),
       size: z.number().optional(),
-      sort: z.union([z.literal("time"), z.literal("likes")]).optional(),
+      sort: z
+        .union([z.literal("time"), z.literal("likes"), z.literal("rating")])
+        .optional(),
       ids: z.string().optional(),
       slowdown: z.number().optional(),
     }),
