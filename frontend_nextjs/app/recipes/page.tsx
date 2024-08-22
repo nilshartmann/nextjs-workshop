@@ -25,7 +25,7 @@ export default async function RecipeListPage({
   const totalPagesPromise = result.then((r) => r.totalPages);
 
   return (
-    <div className={"bg-goldgray"}>
+    <div className={"flex flex-grow bg-goldgray"}>
       <div className={"container mx-auto pt-2"}>
         <RecipeListNavBar />
 

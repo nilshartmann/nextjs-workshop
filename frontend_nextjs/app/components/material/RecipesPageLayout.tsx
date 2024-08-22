@@ -12,7 +12,7 @@ export function RecipesPageLayout({ children }: RecipesPageLayoutProps) {
       <RecipesHeader>
         <Timer />
       </RecipesHeader>
-      <main className={"flex-grow"}>
+      <main className={"flex flex-grow flex-col"}>
         {children}
         {/*<Suspense fallback={<GlobalLoadingIndicator />}>{children}</Suspense>*/}
       </main>
