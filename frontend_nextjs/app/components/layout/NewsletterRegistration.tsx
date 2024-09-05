@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "../Input.tsx";
 import { Button } from "../Button.tsx";
 import React, { useState } from "react";
