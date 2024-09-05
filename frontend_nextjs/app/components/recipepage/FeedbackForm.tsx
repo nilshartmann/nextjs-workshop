@@ -2,14 +2,13 @@
 import { Input, Textarea } from "../Input";
 import { Button } from "../Button.tsx";
 import ButtonBar from "../ButtonBar.tsx";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import {
   feedbackFormAction,
   FeedbackFormState,
 } from "@/app/components/material/feedback-actions.ts";
 import RatingInput from "@/app/components/recipepage/RatingInput.tsx";
-import { useFormState } from "react-dom";
 
 type AddFeedbackFormProps = {
   recipeId: string;
@@ -18,7 +17,11 @@ type AddFeedbackFormProps = {
 export function AddFeedbackForm({ recipeId }: AddFeedbackFormProps) {
   // useFormState will be replaced by useActionState
   //   useActionState also has a isPending information
-  const [currentState, formAction] = useFormState(feedbackFormAction, {});
+  const [currentState, formAction, isPending] = useActionState(
+    feedbackFormAction,
+    {},
+  );
+  console.log("pending", isPending);
 
   return (
     <FeedbackForm
@@ -26,6 +29,7 @@ export function AddFeedbackForm({ recipeId }: AddFeedbackFormProps) {
       formAction={formAction}
       formState={currentState}
       key={currentState.key || "form1"}
+      pending={isPending}
     />
   );
 }
@@ -34,13 +38,19 @@ type FeedbackFormProps = {
   recipeId: string;
   formAction: (fd: FormData) => void;
   formState: FeedbackFormState;
+  pending?: boolean;
 };
 
-function FeedbackForm({ recipeId, formAction, formState }: FeedbackFormProps) {
+function FeedbackForm({
+  recipeId,
+  formAction,
+  formState,
+  pending = false,
+}: FeedbackFormProps) {
   const [stars, setStars] = useState(-1);
   const [commentLength, setCommentLength] = useState(0);
 
-  const formDisabled = false;
+  const formDisabled = pending;
 
   return (
     <form action={formAction}>
