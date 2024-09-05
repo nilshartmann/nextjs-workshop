@@ -9,9 +9,7 @@ type RecipesPageLayoutProps = {
 export function RecipesPageLayout({ children }: RecipesPageLayoutProps) {
   return (
     <>
-      <RecipesHeader>
-        <Timer />
-      </RecipesHeader>
+      <RecipesHeader>{<Timer />}</RecipesHeader>
       <main className={"flex flex-grow flex-col"}>
         {children}
         {/*<Suspense fallback={<GlobalLoadingIndicator />}>{children}</Suspense>*/}
