@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Footer from "./Footer";
 import GlobalNavBar from "./GlobalNavBar";
+import { NewsletterRegistration } from "@/app/components/layout/NewsletterRegistration.tsx";
 
 type DefaultLayoutProps = {
   children: ReactNode;
@@ -12,7 +13,7 @@ export function GlobalPageLayout({ children }: DefaultLayoutProps) {
       <div className={"container mx-auto h-16"}>
         <div className={"flex h-full items-center justify-between"}>
           <GlobalNavBar />
-          {/*<NewsletterRegistration />*/}
+          <NewsletterRegistration />
         </div>
       </div>
 
