@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 
-type RecipesLayoutProps = {
+type StaticPageLayoutProps = {
   children: ReactNode;
 };
 
-export default function RecipesLayout({ children }: RecipesLayoutProps) {
+export default function StaticPageLayout({ children }: StaticPageLayoutProps) {
   return <div className={"container mx-auto flex-grow"}>{children}</div>;
 }
