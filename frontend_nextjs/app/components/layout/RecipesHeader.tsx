@@ -24,9 +24,9 @@ export default function RecipesHeader({ children }: RecipesHeaderProps) {
                   Recipify
                 </Link>
               </H1>
-              <div className={"ms-2 shrink-0 bg-white p-1 text-xl"}>
-                <span className="text-green">Next.js</span> Edition
-              </div>
+              {/*<div className={"ms-2 shrink-0 bg-white p-1 text-xl"}>*/}
+              {/*  <span className="text-green">Next.js</span> Edition*/}
+              {/*</div>*/}
             </div>
             {children}
           </div>
